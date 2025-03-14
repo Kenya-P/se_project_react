@@ -14,6 +14,10 @@ function Header() {
         </div>
     </header>
   );
+
+/*function Data() {
+    const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric'});
+}; */
 }
 
 export default Header;
