@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'cabinet grotesk';
+    font-style: normal;
+    font-weight: 400;
+    src: url(./fonts/CabinetGrotesk-Regular.woff);
+}
+
+@font-face {
+    font-family: 'cabinet grotesk medium';
+    font-weight: 500;
+    font-style: normal;
+    src: url(./fonts/CabinetGrotesk-Medium.woff);
+
+}
+
+@font-face {
+    font-family: 'cabinet grotesk bold';
+    font-weight: normal;
+    font-style: normal;
+    src: url(./fonts/CabinetGrotesk-Bold.woff);
+
+}
+
+@font-face {
+    font-family: 'cabinet grotesk extrabold';
+    font-weight: normal;
+    font-style: normal;
+    src: url(./fonts/CabinetGrotesk-Extrabold.woff);
+
+}
