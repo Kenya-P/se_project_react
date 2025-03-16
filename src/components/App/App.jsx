@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import './App.css'
+import { coordinates, APIkey } from '../../utils/constants';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
-
+import ItemModal from '../ItemModal/ItemModal';
 import Footer from '../Footer/Footer';
+import { getWeather, filterWeatherData } from '../../utils/weatherApi';
 
 function App() {
-  const [weatherData, setWeatherData] = useState({ type: 'cold'});
+  const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "" });
   const [activeModal, setActiveModal] = useState("");
+  const [selectedItem, setSelectedItem] = useState({});
 
   const handleAddClick = () => {
     setActiveModal("add-garment")
@@ -19,11 +22,24 @@ function App() {
     setActiveModal("");
   }
 
+  const handleItemClick = (item) => {
+    setActiveModal("preview");
+    setSelectedItem(item);
+  }
+
+  useEffect(() => {
+    getWeather(coordinates, APIkey)
+    .then(data => {
+      const filteredData = filterWeatherData(data);
+      setWeatherData(filteredData);
+    }).catch(console.error);
+  }, []);
+
   return (
     <div className="page">
       <div className="page__content">
-        <Header handleAddClick={handleAddClick}/>
-        <Main weatherData={weatherData} />
+        <Header handleAddClick={handleAddClick} weatherData={weatherData} />
+        <Main weatherData={weatherData} handleItemClick={handleItemClick} />
 
         <Footer />
       </div>
@@ -34,7 +50,7 @@ function App() {
       handleCloseClick={closeActiveModal}>
       <label htmlFor="name" className="modal__label" >Name
                         <input  id="name" type="text" className="modal__input" placeholder="Name" />
-                        <span id="input-error" class="modal__input-error"></span>
+                        <span id="input-error" className="modal__input-error"></span>
                     </label>
 
                     <label htmlFor="image" className="modal__label" >Image
@@ -54,6 +70,7 @@ function App() {
                     </label>
                 </fieldset>
       </ModalWithForm>
+      <ItemModal activeModal={activeModal} handleCloseClick={closeActiveModal} item={selectedItem} />
     </div>
   )
 }
