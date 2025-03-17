@@ -11,6 +11,7 @@
     line-height: 40px;
     margin: 0;
     position: absolute;
+    color: #fff;
     top: 20px;
     left: 16px;
 }
@@ -19,4 +20,10 @@
     object-fit: cover;
     object-position: right top;
     width: 100%;
+}
+
+@media  screen and (max-width: 627px) {
+    .weather-card {
+        padding-bottom: 32px;
+    }
 }

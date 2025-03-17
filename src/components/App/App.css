@@ -1,9 +1,16 @@
 .page {
     background-color: #f0f0f0;
+    font-family: cabinet grotesk bold, 'Arial', 'Sans-serif';
 }
 
 .page__content {
     max-width: 1360px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+@media  screen and (max-width: 627px) {
+    .page__content {
+        padding: 18px 16px 0;
+    }
 }

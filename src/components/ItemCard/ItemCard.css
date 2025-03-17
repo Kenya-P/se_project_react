@@ -15,7 +15,6 @@
     border-radius: 4px;
     background-color: #fff;
     font-size: 20px;
-    font-weight: 700;
     line-height: 20px;
     color: rgba(0, 0, 0, 0.6);
     top: 15px;
@@ -26,4 +25,12 @@
 
 .card__image {
     width: 100%;
+}
+
+@media  screen and (max-width: 627px) {
+
+    .card__name {
+        gap: 8px;
+        top: 7px;
+    }
 }

@@ -12,7 +12,7 @@
     font-size: 20px;
 }
 
-.modal__close {
+.modal__close .modal__close-preview {
     opacity: 50%;
     background-image: url(../../assets/preview-close.svg);
     background-repeat: no-repeat;
@@ -28,9 +28,27 @@
 .modal__caption {
     margin: 0;
     padding: 20px 0 12px;
+    font-size: 20px;
 }
 
 .modal__weather {
     margin: 0;
     padding-bottom: 32px;
+}
+
+@media  screen and (max-width: 627px) {
+ 
+    .modal__close {
+        width: 21px;
+        height: 21px;
+        top: 12px;
+        right: 12px;
+        background-image: url(../../assets/close-button2.svg);
+    }
+    
+    .modal__footer {
+        padding-left: 20px;
+    }
+
+
 }

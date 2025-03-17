@@ -8,8 +8,16 @@
     margin-right: 24px;
 }
 
-.header__data-location {
+.header__date-location {
     margin: 0;
+}
+
+.header__menu-button {
+    display: none;
+}
+
+.header__mobile-menu_close {
+    display: none;
 }
 
 .header__clothes-button {
@@ -24,4 +32,83 @@
 
 .header__username {
     margin: 0;
+}
+
+@media  screen and (max-width: 627px) {
+    .header {
+        padding: 0;
+        margin: 0;
+        display: contents;
+    }
+
+    .header__logo {
+        width: 89px;
+        height: 40px;
+        padding-bottom: 32px;
+    }
+
+    .header__date-location {
+        padding-bottom: 16px;
+    }
+
+    .header__menu-button {
+        display: block;
+        position: fixed;
+        background-image: url(../../assets/mobile-menu.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        border: none;
+        width: 44px;
+        height: 44px;
+        top: 18px;
+        right: 16px;
+    }
+
+    .header__mobile-menu {
+        display: none;
+        position: fixed;
+        width: 100%;
+        top: 18px;
+        left: 16px;
+        right: 16px;
+        background-color: #fff;
+        z-index: 1;
+    }
+
+    .header__mobile-menu_close {
+        background-image: url(../../assets/close-button2.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: transparent;
+        border: none;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 11px;
+        right: 11px;
+    }
+
+    .header__mobile-menu_opened .header__mobile-menu_close {
+        display: block;
+    }
+
+    .header__mobile-menu_opened {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 28%;
+        border-radius: 8px;
+        box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .header__clothes-button {
+        border: none;
+        background-color: transparent;
+        margin: 0;
+    }
+
+    .header__user-container {
+        margin: 0;
+    }
 }

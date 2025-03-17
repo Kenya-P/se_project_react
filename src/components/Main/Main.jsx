@@ -5,6 +5,19 @@ import { defaultClothingItems } from '../../utils/constants';
 
 
 function Main({ weatherData, handleItemClick }) {
+
+  const handleRandomizeClick = () => {
+    const filteredItems = defaultClothingItems.filter((item) => {
+      return item.weather === weatherData.type;
+    });
+    
+    const randomIndex = Math.floor(Math.random() * filteredItems.length);
+    const randomItem = filteredItems[randomIndex];
+
+    handleItemClick(randomItem);
+
+  }
+
   return(
     <main className="content">
       <WeatherCard weatherData={weatherData} />
@@ -18,6 +31,7 @@ function Main({ weatherData, handleItemClick }) {
           return <ItemCard key={item._id} item={item} onCardClick={handleItemClick} />;
         })}
       </ul>
+      <button className="cards__randomize-button" type="button" onClick={handleRandomizeClick} >Randomize</button>
     </main>
   );
 }

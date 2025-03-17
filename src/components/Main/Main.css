@@ -6,3 +6,43 @@
     list-style-type: none;
     gap: 21px;
 }
+
+.cards__randomize-button {
+    display: none;
+}
+
+@media  screen and (max-width: 627px) {
+    .cards {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        top: 32px;
+    }
+
+    .cards__list{
+        padding-bottom: 30px;
+    }
+
+    .cards__randomize-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 16px;
+        line-height: 20px;
+        border: none;
+        width: 100%;
+        height: 44px;
+        border-radius: 4px;
+        background-color: #000;
+        color: #fff;
+        margin-bottom: 83px;
+    }
+
+    .cards__randomize-button::before {
+        content: url(../../assets/randomize-icon.svg);
+        width: 12px;
+        height: 14px;
+    }
+}
