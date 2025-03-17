@@ -1,5 +1,4 @@
 .card {
-    width: 323px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -10,7 +9,7 @@
 .card__name {
     margin: 0;
     padding: 2px 12px;
-    width: 73px;
+    width: 53px;
     height: 24px;
     border-radius: 4px;
     background-color: #fff;
@@ -20,17 +19,27 @@
     top: 15px;
     display: flex;
     justify-content: center;
+    align-items: center;
     position: absolute;
 }
 
 .card__image {
-    width: 100%;
+    width: 325px;
+    height: 328px;
+    object-fit: cover;
+    object-position: center;
 }
 
 @media  screen and (max-width: 627px) {
 
     .card__name {
+        width: 73px;
         gap: 8px;
         top: 7px;
+    }
+
+    .card__image {
+        width: 162px;
+        height: 162px;
     }
 }
