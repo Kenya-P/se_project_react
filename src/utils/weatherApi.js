@@ -13,12 +13,21 @@ export const getWeather = ({latitude, longitude}, APIkey) => {
 
 };
 
+const isDay = (sys, currentTime) => {
+
+    const currentTimeInSeconds = Math.floor(currentTime / 1000);
+    
+    return currentTimeInSeconds >= sys.sunrise && currentTimeInSeconds <= sys.sunset;
+};
+
 export const filterWeatherData = (data) => {
     const result = {};
 
     result.cty = data.name;
     result.temp = { F: data.main.temp };
     result.type = getWeatherType(data.main.temp);
+    result.condition = data.weather[0].main.toLowerCase();
+    result.isDay = isDay(data.sys, Date.now());
     return result;
 };
 

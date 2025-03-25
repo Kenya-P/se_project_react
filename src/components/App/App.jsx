@@ -30,7 +30,8 @@ function App() {
   useEffect(() => {
     getWeather(coordinates, APIkey)
     .then(data => {
-      const filteredData = filterWeatherData(data);
+      const currentTime =  Date.now();
+      const filteredData = filterWeatherData(data, currentTime);
       setWeatherData(filteredData);
     }).catch(console.error);
   }, []);
@@ -39,7 +40,7 @@ function App() {
     <div className="page">
       <div className="page__content">
         <Header handleAddClick={handleAddClick} weatherData={weatherData} />
-        <Main weatherData={weatherData} handleItemClick={handleItemClick} />
+        <Main weatherData={ weatherData } handleItemClick={handleItemClick} />
 
         <Footer />
       </div>
