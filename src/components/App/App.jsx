@@ -8,11 +8,19 @@ import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import ItemModal from '../ItemModal/ItemModal';
 import Footer from '../Footer/Footer';
 import { getWeather, filterWeatherData } from '../../utils/weatherApi';
+import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
+
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "" });
   const [activeModal, setActiveModal] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
+  const [currentTempUnit, setCurrentTempUnit] = useState("F");
+
+
+  const handleToggleSwitchChange = () => {
+    setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
+  }
 
   const handleAddClick = () => {
     setActiveModal("add-garment")
@@ -37,6 +45,7 @@ function App() {
   }, []);
 
   return (
+    <CurrentTempUnitContext.Provider value={{ currentTempUnit, handleToggleSwitchChange }}>
     <div className="page">
       <div className="page__content">
         <Header handleAddClick={handleAddClick} weatherData={weatherData} />
@@ -69,6 +78,7 @@ function App() {
       </ModalWithForm>
       <ItemModal activeModal={activeModal} handleCloseClick={closeActiveModal} item={selectedItem} />
     </div>
+    </CurrentTempUnitContext.Provider>
   )
 }
 
