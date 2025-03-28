@@ -1,13 +1,16 @@
 import './Main.css';
 import WeatherCard from '../WeatherCard/WeatherCard';
 import ItemCard from '../ItemCard/ItemCard';
-import { defaultClothingItems } from '../../utils/constants';
+import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
+import { useContext } from 'react';
 
 
-function Main({ weatherData, handleItemClick }) {
+
+function Main({ weatherData, handleItemClick, clothingItems }) {
+  const { currentTempUnit } = useContext(CurrentTempUnitContext);
 
   const handleRandomizeClick = () => {
-    const filteredItems = defaultClothingItems.filter((item) => {
+    const filteredItems = clothingItems.filter((item) => {
       return item.weather === weatherData.type;
     });
     
@@ -22,10 +25,10 @@ function Main({ weatherData, handleItemClick }) {
     <main className="content">
       <WeatherCard weatherData={weatherData} />
       <section className="cards">
-        <p className="cards__text">Today is {weatherData.temp.F}&deg; F/ You may want to wear:</p>
+        <p className="cards__text">Today is {weatherData.temp[currentTempUnit]}&deg;{currentTempUnit}/ You may want to wear:</p>
       </section>
       <ul className="cards__list">
-        {defaultClothingItems.filter((item) => {
+        {clothingItems.filter((item) => {
           return item.weather === weatherData.type;
         }).map((item) => {
           return <ItemCard key={item._id} item={item} onCardClick={handleItemClick} />;
