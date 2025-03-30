@@ -1,30 +1,42 @@
-const baseUrl = 'http://localhost:3000/api/v1'; // Replace with your actual API URL
-const headers = { "Content-Type": "application/json" };
-
+const baseUrl = 'http://localhost:3001';
+const api = { getItems, addItem, removeItem, _handleResponse };
 
 function _handleResponse(res) {
     if (res.ok) {
         return res.json();
     }
     return Promise.reject(`Error: ${res.status}`);
-};
+}
 
 function getItems() {
-  return fetch(`${baseUrl}/items`).then(_handleResponse);
+    return fetch(`${baseUrl}/items`, {
+        method: "GET",
+    })
+    .then(_handleResponse)
+    .catch((error) => Promise.reject(error));
 }
 
-function addItem(item) {
-  return fetch( `${baseUrl}/items`, {
+function addItem({ name, imageUrl, weather }) {
+  return fetch(`${baseUrl}/items`, {
     method: "POST",
-    headers,
-    body: JSON.stringify(item)
-  }).then(_handleResponse);
+    headers: {
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+      imageUrl: imageUrl,
+      weather: weather,
+    }),
+  }).then(_handleResponse)
+  .catch((error) => Promise.reject(error));
 }
 
-function  removeItem(itemId) {
-  return fetch(`${baseUrl}/items/${itemId}`, {
-    method: "DELETE",
-  }).then(_handleResponse);
+function removeItem(itemId) {
+    return fetch(`${baseUrl}/items/${itemId}`, {
+        method: "DELETE",
+    })
+    .then(_handleResponse)
+    .catch((error) => Promise.reject(error));
 }
 
-export { getItems, addItem, removeItem };
+export default api;

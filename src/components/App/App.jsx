@@ -12,9 +12,7 @@ import Profile from '../Profile/Profile';
 import Footer from '../Footer/Footer';
 import { getWeather, filterWeatherData } from '../../utils/weatherApi';
 import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
-import { defaultClothingItems } from '../../utils/constants';
-import { addItem, getItems, removeItem } from '../../utils/api';
-
+import api from '../../utils/api';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -26,7 +24,7 @@ function App() {
 // const [loading, setLoading] = useState(false);
 
 //make an empty array for clothing items
- const [clothingItems, setClothingItems] = useState(defaultClothingItems);
+ const [clothingItems, setClothingItems] = useState([]);
 
   const handleToggleSwitchChange = () => {
     setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
@@ -45,40 +43,40 @@ function App() {
     setSelectedItem(item);
   }
 
-  const handleDeleteClick = (item) => {
+  const handleDeleteClick = (itemId) => {
+    setSelectedItem({ _id: itemId });
     setActiveModal("delete");
-    setSelectedItem(item);
-  }
+    }
 
   const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
-    addItem({ name, imageUrl, weather })
+    api.addItem({ name, imageUrl, weather })
     .then((newItem) => {
       setClothingItems((prevItems) => [newItem, ...prevItems]);
     });
     closeActiveModal();
   }
 
-  const handleDeleteItemModalSubmit = (item) => {
-    const itemId = item._id;
-    removeItem(itemId)
-    .then(() => {
-      setClothingItems((clothingItems) => clothingItems.filter(() => item.id !== itemId));
-      closeActiveModal();
-    })
-    .catch(console.error);
+  const handleDeleteItemModalSubmit = () => {
+    api.removeItem(selectedItem._id)
+      .then(() => {
+        setClothingItems((prevItems) =>
+          prevItems.filter((item) => item._id !== selectedItem._id)
+        );
+        closeActiveModal();
+      })
+      .catch(console.error);
   }
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
     .then(data => {
-      const currentTime =  Date.now();
-      const filteredData = filterWeatherData(data, currentTime);
+      const filteredData = filterWeatherData(data);
       setWeatherData(filteredData);
     }).catch(console.error);
   }, []);
 
   useEffect(() => {
-    getItems()
+    api.getItems()
     .then(data => {
       setClothingItems(data);
     })
@@ -91,16 +89,15 @@ function App() {
       <div className="page__content">
         <Header handleAddClick={handleAddClick} weatherData={weatherData} />
           <Routes>
-            <Route path="/" element={<Main weatherData={weatherData} handleItemClick={handleItemClick} clothingItems={clothingItems} onDeleteClick={handleDeleteClick} />} />
-            <Route path="/profile" element={<Profile onClick={handleItemClick} handleAddClick={handleAddClick} clothingItems={clothingItems} onDeleteClick={handleDeleteClick} />} />
+            <Route path="/" element={<Main weatherData={weatherData} handleItemClick={handleItemClick} clothingItems={clothingItems} />} />
+            <Route path="/profile" element={<Profile onClick={handleItemClick} handleAddClick={handleAddClick} clothingItems={clothingItems} />} />
           </Routes>
 
         <Footer />
       </div>
       <AddItemModal isOpen={activeModal === "add-garment"} onClose={closeActiveModal} onAddItemModalSubmit={handleAddItemModalSubmit}/>
-      <ItemModal activeModal={activeModal} handleCloseClick={closeActiveModal} item={selectedItem} onDeleteClick={handleDeleteClick} />
-      <DeleteItemModal isOpen={activeModal === "delete"} onClose={closeActiveModal} item={selectedItem} onDeleteClick={handleDeleteItemModalSubmit} />
-    </div>
+      <ItemModal activeModal={activeModal} isOpen={activeModal === "preview"} handleCloseClick={closeActiveModal} item={selectedItem} handleDeleteClick={handleDeleteClick} />
+      <DeleteItemModal activeModal={activeModal} isOpen={activeModal === "delete"}  onClose={closeActiveModal} onClick={handleDeleteItemModalSubmit} />    </div>
     </CurrentTempUnitContext.Provider>
   )
 }

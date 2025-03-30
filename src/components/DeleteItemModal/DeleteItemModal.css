@@ -2,25 +2,35 @@
     position: absolute;
     background-color: #FFFFFF;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    visibility: hidden;
+    width: 670px;
+    height: 280px;
+    border-radius: 20px;
   }
   
   .modal_opened {
     visibility: visible;
   }
   
-  .delete__text {
+  .modal__delete-text {
     color: #000000;
     max-width: 367px;
+    padding: 0;
+    margin:0 0 40px;
+    text-align: center;
   }
   
-  .delete__confirm {
+  .modal__delete-confirm {
     color: #FF4D00;
+    background: none;
+    border: none;
+    margin-bottom: 24px;
   }
   
-  .delete__cancel {
+  .modal__delete-cancel {
     color: #000000;
+    background: none;
+    border: none;
   }

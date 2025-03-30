@@ -25,3 +25,14 @@
     list-style-type: none;
     gap: 20px;
 }
+
+@media  screen and (max-width: 627px) {
+
+    .clothes__section {
+        flex-direction: column;
+    }
+
+    .clothes__section-list {
+        flex-direction: column;
+    }
+}
