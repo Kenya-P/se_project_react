@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-
+import { Route, Routes } from 'react-router-dom';
 import './App.css'
 import { coordinates, APIkey } from '../../utils/constants';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 //import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import ItemModal from '../ItemModal/ItemModal';
+import AddItemModal from '../AddItemModal/AddItemModal';
+import DeleteItemModal from '../DeleteItemModal/DeleteItemModal';
+import Profile from '../Profile/Profile';
 import Footer from '../Footer/Footer';
 import { getWeather, filterWeatherData } from '../../utils/weatherApi';
 import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
-import AddItemModal from '../AddItemModal/AddItemModal';
 import { defaultClothingItems } from '../../utils/constants';
+import { addItem, getItems, removeItem } from '../../utils/api';
 
 
 function App() {
@@ -42,10 +45,27 @@ function App() {
     setSelectedItem(item);
   }
 
-  const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
+  const handleDeleteClick = (item) => {
+    setActiveModal("delete");
+    setSelectedItem(item);
+  }
 
-    setClothingItems([{ name, link: imageUrl, weather }, ...clothingItems]);
+  const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
+    addItem({ name, imageUrl, weather })
+    .then((newItem) => {
+      setClothingItems((prevItems) => [newItem, ...prevItems]);
+    });
     closeActiveModal();
+  }
+
+  const handleDeleteItemModalSubmit = (item) => {
+    const itemId = item._id;
+    removeItem(itemId)
+    .then(() => {
+      setClothingItems((clothingItems) => clothingItems.filter(() => item.id !== itemId));
+      closeActiveModal();
+    })
+    .catch(console.error);
   }
 
   useEffect(() => {
@@ -57,17 +77,29 @@ function App() {
     }).catch(console.error);
   }, []);
 
+  useEffect(() => {
+    getItems()
+    .then(data => {
+      setClothingItems(data);
+    })
+    .catch(console.error);
+  }, []);
+
   return (
     <CurrentTempUnitContext.Provider value={{ currentTempUnit, handleToggleSwitchChange }}>
     <div className="page">
       <div className="page__content">
         <Header handleAddClick={handleAddClick} weatherData={weatherData} />
-        <Main weatherData={ weatherData } handleItemClick={handleItemClick} clothingItems={clothingItems} />
+          <Routes>
+            <Route path="/" element={<Main weatherData={weatherData} handleItemClick={handleItemClick} clothingItems={clothingItems} onDeleteClick={handleDeleteClick} />} />
+            <Route path="/profile" element={<Profile onClick={handleItemClick} handleAddClick={handleAddClick} clothingItems={clothingItems} onDeleteClick={handleDeleteClick} />} />
+          </Routes>
 
         <Footer />
       </div>
       <AddItemModal isOpen={activeModal === "add-garment"} onClose={closeActiveModal} onAddItemModalSubmit={handleAddItemModalSubmit}/>
-      <ItemModal activeModal={activeModal} handleCloseClick={closeActiveModal} item={selectedItem} />
+      <ItemModal activeModal={activeModal} handleCloseClick={closeActiveModal} item={selectedItem} onDeleteClick={handleDeleteClick} />
+      <DeleteItemModal isOpen={activeModal === "delete"} onClose={closeActiveModal} item={selectedItem} onDeleteClick={handleDeleteItemModalSubmit} />
     </div>
     </CurrentTempUnitContext.Provider>
   )

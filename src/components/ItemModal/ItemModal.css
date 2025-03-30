@@ -1,8 +1,14 @@
-.modal__content {
-    border-radius: 8px;
+.modal__content-preview {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 496px;
+    box-sizing: border-box;
+    width: 100%;
 }
 
-.modal__content_type_image {
+.modal__content-preview_type_image {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -35,6 +41,18 @@
     margin: 0;
     padding-bottom: 32px;
 }
+
+.modal__delete-button {
+    color: #FF4D00;
+    border: none;
+    background-color: transparent;
+    margin-right: 32px;
+    padding: 0;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    bottom: 88px;
+  }
 
 @media  screen and (max-width: 627px) {
  
