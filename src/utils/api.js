@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3001';
+const baseUrl = 'http://localhost:3000';
 const api = { getItems, addItem, removeItem, _handleResponse };
 
 function _handleResponse(res) {
@@ -20,7 +20,7 @@ function addItem({ name, imageUrl, weather }) {
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
-      "content-Type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       name: name,

@@ -12,8 +12,7 @@ import Profile from '../Profile/Profile';
 import Footer from '../Footer/Footer';
 import { getWeather, filterWeatherData } from '../../utils/weatherApi';
 import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
-import api from '../../utils/api';
-
+import api from '../../utils/mockApi';
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
   const [activeModal, setActiveModal] = useState("");
