@@ -11,7 +11,7 @@ function Profile({handleAddClick, clothingItems, onClick}) {
                 <SideBar />
             </section>
             <section className="profile__clothes-section" >
-                <ClothesSection clothingItems={clothingItems} onClick={handleAddClick}/>
+                <ClothesSection clothingItems={clothingItems} onAddNew={handleAddClick} onItemClick={onClick}/>
             </section>
 
         </div>

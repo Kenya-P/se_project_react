@@ -31,7 +31,7 @@ function Main({ weatherData, handleItemClick, clothingItems }) {
         {clothingItems.filter((item) => {
           return item.weather === weatherData.type;
         }).map((item) => {
-          return <ItemCard key={item._id} item={item} onCardClick={handleItemClick} />;
+          return <ItemCard key={item._id} item={item} onItemClick={handleItemClick} />;
         })}
       </ul>
       <button className="cards__randomize-button" type="button" onClick={handleRandomizeClick} >Randomize</button>
