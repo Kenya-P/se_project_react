@@ -1,63 +1,63 @@
 export const weatherOptions = [
   {
     day: true,
-    condition: "Clear",
+    condition: "clear",
     url: new URL('../assets/day/Clear.svg', import.meta.url).href,
   },
   {
     day: true,
-    condition: "Cloudy",
+    condition: "cloudy",
     url: new URL('../assets/day/Cloudy.svg', import.meta.url).href,
   },
   {
     day: true,
-    condition: "Fog",
+    condition: "fog",
     url: new URL('../assets/day/Fog.svg', import.meta.url).href,
   },
   {
     day: true,
-    condition: "Rain",
+    condition: "rain",
     url: new URL('../assets/day/Rain.svg', import.meta.url).href,
   },
   {
     day: true,
-    condition: "Snow",
+    condition: "snow",
     url: new URL('../assets/day/Snow.svg', import.meta.url).href,
   },
   {
     day: true,
-    condition: "Storm",
+    condition: "storm",
     url: new URL('../assets/day/Storm.svg', import.meta.url).href,
   },
 
   {
     day: false,
-    condition: "Clear",
+    condition: "clear",
     url: new URL('../assets/night/NightClear.svg', import.meta.url).href,
   },
   {
     day: false,
-    condition: "Cloudy",
+    condition: "cloudy",
     url: new URL('../assets/night/NightCloudy.svg', import.meta.url).href,
   },
   {
     day: false,
-    condition: "Fog",
+    condition: "fog",
     url: new URL('../assets/night/NightFog.svg', import.meta.url).href,
   },
   {
     day: false,
-    condition: "Rain",
+    condition: "rain",
     url: new URL('../assets/night/NightRain.svg', import.meta.url).href,
   },
   {
     day: false,
-    condition: "Snow",
+    condition: "snow",
     url: new URL('../assets/night/NightSnow.svg', import.meta.url).href,
   },
   {
     day: false,
-    condition: "Storm",
+    condition: "storm",
     url: new URL('../assets/night/NightStorm.svg', import.meta.url).href,
   },
   

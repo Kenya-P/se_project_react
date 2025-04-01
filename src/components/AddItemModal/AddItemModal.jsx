@@ -41,14 +41,14 @@ export default function AddItemModal({isOpen, onClose, onAddItemModalSubmit}) {
 
             <fieldset className="modal__radio-buttons">
                 <legend className="modal__label">Select the weather type:</legend>
-                <label htmlFor="hot" className="modal__label modal__label_type_radio" name="weather"> Hot
-                    <input id="hot" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="Hot" checked={weather === "Hot"}></input>
+                <label htmlFor="hot" className="modal__label modal__label_type_radio" name="weather"> hot
+                    <input id="hot" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="hot" checked={weather === "hot"}></input>
                 </label>
-                <label htmlFor="warm" className="modal__label modal__label_type_radio" name="weather"> Warm
-                    <input id="warm" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="Warm" checked={weather === "Warm"}></input>
+                <label htmlFor="warm" className="modal__label modal__label_type_radio" name="weather"> warm
+                    <input id="warm" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="warm" checked={weather === "warm"}></input>
                 </label>
-                <label htmlFor="cold" className="modal__label modal__label_type_radio" name="weather"> Cold
-                    <input id="cold" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="Cold" checked={weather === "Cold"}></input>
+                <label htmlFor="cold" className="modal__label modal__label_type_radio" name="weather"> cold
+                    <input id="cold" type="radio" className="modal__radio-input" name="weather" onChange={handleWeatherChange} value="cold" checked={weather === "cold"}></input>
                 </label>
             </fieldset>
         </ModalWithForm>
