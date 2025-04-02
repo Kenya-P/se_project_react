@@ -18,6 +18,11 @@
     font-size: 20px;
 }
 
+.modal__image {
+    width: 498px;
+    height: 610px;
+}
+
 .modal__close .modal__close-preview {
     opacity: 50%;
     background-image: url(../../assets/preview-close.svg);
@@ -55,6 +60,11 @@
   }
 
 @media  screen and (max-width: 627px) {
+
+    .modal__image {
+        height: 425px;
+        width: 343px;
+    }
  
     .modal__close {
         width: 21px;

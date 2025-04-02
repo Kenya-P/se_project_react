@@ -1,7 +1,7 @@
 const baseUrl = 'http://localhost:3000';
 const api = { getItems, addItem, removeItem, _handleResponse };
 
-function _handleResponse(res) {
+export function _handleResponse(res) {
     if (res.ok) {
         return res.json();
     }

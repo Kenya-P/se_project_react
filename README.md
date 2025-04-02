@@ -10,4 +10,6 @@ Currently, two official plugins are available:
 
 ## Github pages link
 
+https://github.com/Kenya-P/se_project_react.git
+
 https://kenya-p.github.io/se_project_react/
