@@ -40,3 +40,4 @@ function removeItem(itemId) {
 }
 
 export default api;
+export { _handleResponse };
