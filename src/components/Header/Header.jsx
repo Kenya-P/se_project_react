@@ -5,7 +5,7 @@ import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Header({ handleAddClick, weatherData }) {
+function Header({ handleAddClick, weatherData, handleLoginClick, handleRegisterClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric'});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -20,6 +20,8 @@ function Header({ handleAddClick, weatherData }) {
           <button className="header__mobile-menu_close" type="button" onClick={() => setIsMenuOpen(!isMenuOpen)}></button>
           <ToggleSwitch />
           <button onClick={handleAddClick} type="button" className="header__clothes-button">+ Add Clothes</button>
+          <button onClick={handleLoginClick}  className="header__button-login" type="button">Log In</button>
+          <button onClick={handleRegisterClick}  className="header__button-register" type="button">Sign Up</button>
           <Link to="/profile" className="header__user-link">
             <div className="header__user-container">
                 <p className="header__username">Terrence Tegegne</p>

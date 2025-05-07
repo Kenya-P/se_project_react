@@ -39,5 +39,5 @@ function removeItem(itemId) {
     .catch((error) => Promise.reject(error));
 }
 
+
 export default api;
-export { _handleResponse };

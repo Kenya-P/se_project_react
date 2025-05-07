@@ -10,10 +10,10 @@ Currently, two official plugins are available:
 
 ## Github link
 
-- front end
+- frontend
 https://github.com/Kenya-P/se_project_react.git
 
-- back end
+- backend
 https://github.com/Kenya-P/se_project_express
 
 ### Github pages link

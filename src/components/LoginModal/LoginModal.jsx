@@ -4,7 +4,7 @@ import { useForm } from '../../utils/useForm';
 
 const initialFormValues = { email: '', password: '' };
 
-export default function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
+function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
     const { values, handleChange, setValues } = useForm(initialFormValues);
 
     const handleSubmit = (e) => {
@@ -19,6 +19,8 @@ export default function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
             });
     };
 
+
+
     return (
         <ModalWithForm
             buttonText={isLoading ? 'Saving...' : 'Login'}
@@ -28,11 +30,11 @@ export default function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
             onClose={onClose}
             onSubmit={handleSubmit}
         >
-            <label htmlFor="email" className="modal__label">
+            <label htmlFor="login-email" className="modal__label">
                 Email
                 <input
-                    id="email"
-                    name="email"
+                    id="login-email"
+                    name="login-email"
                     type="email"
                     className="modal__input"
                     placeholder="Email"
@@ -43,11 +45,11 @@ export default function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
                 <span id="input-error" className="modal__input-error"></span>
             </label>
 
-            <label htmlFor="password" className="modal__label">
+            <label htmlFor="login-password" className="modal__label">
                 Password
                 <input
-                    id="password"
-                    name="password"
+                    id="login-password"
+                    name="login-password"
                     type="password"
                     className="modal__input"
                     placeholder="Password"
@@ -62,3 +64,5 @@ export default function LoginModal({ isOpen, onClose, onLogin, isLoading }) {
         </ModalWithForm>
     );
 }
+
+export default LoginModal;

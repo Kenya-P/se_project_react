@@ -2,7 +2,8 @@ import { _handleResponse } from './api';
 
 const auth = { signUp, signIn, checkToken };
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://localhost:3001';
+// const baseUrl = 'https://api.example.com';
 
 function signUp({ name, avatar, email, password }) {
   return fetch(`${baseUrl}/signup`, {

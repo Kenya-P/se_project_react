@@ -45,11 +45,11 @@ export default function RegisterModal({ isOpen, onClose, onRegister, isLoading }
                 <span id="input-error" className="modal__input-error"></span>
             </label>
 
-            <label htmlFor="email" className="modal__label">
+            <label htmlFor="register-email" className="modal__label">
                 Email
                 <input
-                    id="email"
-                    name="email"
+                    id="register-email"
+                    name="register-email"
                     type="email"
                     className="modal__input"
                     placeholder="Email"
@@ -60,11 +60,11 @@ export default function RegisterModal({ isOpen, onClose, onRegister, isLoading }
                 <span id="input-error" className="modal__input-error"></span>
             </label>
 
-            <label htmlFor="password" className="modal__label">
+            <label htmlFor="register-password" className="modal__label">
                 Password
                 <input
-                    id="password"
-                    name="password"
+                    id="register-password"
+                    name="register-password"
                     type="password"
                     className="modal__input"
                     placeholder="Password"
