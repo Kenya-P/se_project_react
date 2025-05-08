@@ -13,14 +13,16 @@ import LoginModal from '../LoginModal/LoginModal';
 import Footer from '../Footer/Footer';
 import { getWeather, filterWeatherData } from '../../utils/weatherApi';
 import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
+
 import api from '../../utils/mockApi';
-import auth from '../../utils/auth';
+
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
   const [activeModal, setActiveModal] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
   const [currentTempUnit, setCurrentTempUnit] = useState("F");
   const [isLoading, setIsLoading] = useState(false);
+  
 
 
   const [clothingItems, setClothingItems] = useState([]);

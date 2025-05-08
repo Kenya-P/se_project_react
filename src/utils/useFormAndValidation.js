@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react';
+import { useState, useCallback } from 'react';
 
 const validationConfig = {
     required: {
@@ -29,47 +29,59 @@ export function useFormAndValidation() {
     const [isValid, setIsValid] = useState(false);
 
     const validateField = useCallback((name, value) => {
-        if (validationPatterns[name]) {
-          const { pattern, errorMessage } = validationPatterns[name];
-          if (!pattern.test(value)) {
-            return errorMessage;
-          }
-        } else if (!value) {
-          return "This field is required";
+        const rule = validationConfig[name];
+        if (rule && !rule.isValid(value)) {
+            return rule.errorMessage;
         }
-        return "";
-      }, []);
+        if (!value) {
+            return 'This field is required';
+        }
+        return '';
+    }, []);
+
+    const validateForm = useCallback((formValues) => {
+        let valid = true;
+        const newErrors = {};
+
+        for (const [name, value] of Object.entries(formValues)) {
+            const error = validateField(name, value);
+            if (error) {
+                newErrors[name] = error;
+                valid = false;
+            }
+        }
+
+        setErrors(newErrors);
+        return valid;
+    }, [validateField]);
 
     const handleChange = useCallback((e) => {
-        const {name, value} = e.target;
-        setValues((prev) => ({ ...prev, [name]: value }));
-        setIsValid(e.target.closest("form").checkValidity());
-  
+        const { name, value } = e.target;
+        const newValues = { ...values, [name]: value };
+        setValues(newValues);
+
         const error = validateField(name, value);
-        if (error) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
+        setErrors((prev) => ({
+            ...prev,
             [name]: error,
-          }));
-        } else {
-          setErrors((prevErrors) => {
-            const newErrors = { ...prevErrors };
-            delete newErrors[name];
-            return newErrors;
-          });
-        }
-      },
-      [validateField]
-    );
+        }));
 
+        setIsValid(validateForm(newValues));
+    }, [values, validateField, validateForm]);
 
-    const resetForm = useCallback(() => {
+    const resetForm = () => {
         setValues({});
         setErrors({});
         setIsValid(false);
-    }
-    , []);
+    };
 
-
-    return {values, handleChange, errors, isValid, resetForm, setValues, setErrors};
+    return {
+        values,
+        handleChange,
+        errors,
+        isValid,
+        resetForm,
+        setValues,
+        setErrors,
+    };
 }
