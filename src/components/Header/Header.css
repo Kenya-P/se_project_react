@@ -8,6 +8,19 @@
     margin-right: 24px;
 }
 
+.header__avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ccc;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  
+
 .header__date-location {
     margin: 0;
     font-size: 20px;

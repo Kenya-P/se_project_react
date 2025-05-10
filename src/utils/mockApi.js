@@ -1,6 +1,6 @@
 import defaultClothingItems from '../../db.json';
 
-const api = {
+const mockApi = {
   getItems: () => {
    // Try to get items from localStorage first
    const storedItems = localStorage.getItem('clothingItems');
@@ -39,4 +39,4 @@ const api = {
   }
 };
 
-export default api;
+export default mockApi;

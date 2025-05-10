@@ -1,11 +1,11 @@
 import { _handleResponse } from './api';
 
-const auth = { signUp, signIn, checkToken };
+const auth = { register, logIn, checkToken };
 
 const baseUrl = 'http://localhost:3001';
 // const baseUrl = 'https://api.example.com';
 
-function signUp({ name, avatar, email, password }) {
+function register({ name, avatar, email, password }) {
   return fetch(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
@@ -16,7 +16,7 @@ function signUp({ name, avatar, email, password }) {
   .catch((error) => Promise.reject(error));
 }
 
-function signIn({ email, password }) {
+function logIn({ email, password }) {
   return fetch(`${baseUrl}/signin`, {
     method: "POST",
     headers: {

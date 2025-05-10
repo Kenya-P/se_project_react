@@ -1,5 +1,7 @@
 const baseUrl = 'http://localhost:3000';
-const api = { getItems, addItem, removeItem, checkToken, signIn, signUp, _handleResponse };
+const api = { getItems, addItem, removeItem, likeItem, dislikeItem, checkToken, logIn, register, updateUserProfile, _handleResponse };
+const token = localStorage.getItem('jwt');
+
 
 export function _handleResponse(res) {
     if (res.ok) {
@@ -39,7 +41,23 @@ function removeItem(itemId) {
     .catch((error) => Promise.reject(error));
 }
 
-function signUp({ name, avatar, email, password }) {
+function likeItem(itemId) {
+    return fetch(`${baseUrl}/items/${itemId}/likes`, {
+        method: "PUT",
+    })
+    .then(_handleResponse)
+    .catch((error) => Promise.reject(error));
+}
+
+function dislikeItem(itemId) {
+    return fetch(`${baseUrl}/items/${itemId}/likes`, {
+        method: "DELETE",
+    })
+    .then(_handleResponse)
+    .catch((error) => Promise.reject(error));
+}
+
+function register({ name, avatar, email, password }) {
   return fetch(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
@@ -50,13 +68,28 @@ function signUp({ name, avatar, email, password }) {
   .catch((error) => Promise.reject(error));
 }
 
-function signIn({ email, password }) {
+function logIn({ email, password }) {
   return fetch(`${baseUrl}/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
+  }).then(_handleResponse)
+  .catch((error) => Promise.reject(error));
+}
+
+function updateUserProfile({ name, avatar }) {
+  return fetch(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      name: name,
+      avatar: avatar,
+    }),
   }).then(_handleResponse)
   .catch((error) => Promise.reject(error));
 }
