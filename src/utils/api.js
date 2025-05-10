@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://localhost:3001';
 const api = { getItems, addItem, removeItem, likeItem, dislikeItem, checkToken, logIn, register, updateUserProfile, _handleResponse };
 const token = localStorage.getItem('jwt');
 
@@ -78,6 +78,17 @@ function logIn({ email, password }) {
   }).then(_handleResponse)
   .catch((error) => Promise.reject(error));
 }
+
+/*function logOut() {
+  return fetch(`${baseUrl}/signout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then(_handleResponse)
+  .catch((error) => Promise.reject(error));
+}*/
 
 function updateUserProfile({ name, avatar }) {
   return fetch(`${baseUrl}/users/me`, {
