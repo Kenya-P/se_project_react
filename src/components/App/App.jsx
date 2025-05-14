@@ -160,24 +160,41 @@ const handleLogInUser = (userData) => {
       .catch(console.error);
   }
 
-  const handleRegisterUser = (userData) => {
-    setIsLoading(true);
-    return api.register(userData)
+const handleRegisterUser = (userData) => {
+  // Start loading state
+  setIsLoading(true);
+
+  // Validate the user data before sending it
+  if (!userData.name || !userData.email || !userData.password) {
+    console.error("Please fill in all fields");
+    setIsLoading(false);
+    return;
+  }
+
+  // Send the data to the backend
+  return api.register(userData)
     .then((res) => {
       if (res.token) {
+        // Successful registration, store JWT and user info
         localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
         setCurrentUser(res.user);
         setIsRegisterModalOpen(false);
       }
     })
-      .catch((error) => {
+    .catch((error) => {
+      // Handle different types of errors (e.g., email already exists)
+      if (error.response && error.response.status === 409) {
+        console.error("User with this email already exists");
+      } else {
         console.error("Error registering user:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+      }
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+};
+
 
   const handleSignOutUser = () => {
     localStorage.removeItem("jwt");
@@ -196,8 +213,6 @@ const handleLogInUser = (userData) => {
 
 
 useEffect(() => {
-  if (!isLoggedIn) return;
-
   api.getItems()
     .then((data) => {
       console.log("Fetched clothing items:", data);
@@ -206,7 +221,8 @@ useEffect(() => {
     .catch((error) => {
       console.error("Error fetching clothing items:", error);
     });
-}, [isLoggedIn]);
+}, []);
+
 
 
   useEffect(() => {

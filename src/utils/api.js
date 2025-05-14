@@ -4,24 +4,37 @@ const baseUrl = import.meta.env.MODE === "development"
 
   
 export function _handleResponse(res) {
-    if (res.ok) {
-        return res.json();
-    }
-    return Promise.reject(`Error: ${res.status}`);
+  if (res.ok) {
+    return res.json();
+  }
+
+  return res.text().then((text) => {
+    console.error("Response error text:", text); // Helps see HTML errors
+    return Promise.reject(`Error ${res.status}: ${text}`);
+  });
 }
 
 function getItems() {
-    const token = localStorage.getItem('jwt');
-    return fetch(`${baseUrl}/items`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    .then(_handleResponse)
-    .catch((error) => Promise.reject(error));
+  const token = localStorage.getItem('jwt');
+  if (!token) {
+    console.warn("JWT token missing; skipping item fetch.");
+    return Promise.resolve([]); // Avoid fetch if token is missing
+  }
+
+  return fetch(`${baseUrl}/items`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  .then(_handleResponse)
+  .catch((error) => {
+    console.error("Fetch items failed:", error);
+    return [];
+  });
 }
+
 
 function addItem({ name, imageUrl, weather }) {
   return fetch(`${baseUrl}/items`, {

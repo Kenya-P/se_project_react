@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function Header({ handleAddClick, weatherData, handleLoginClick, handleRegisterClick, handleLogoutClick }) {
+function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, handleLogoutClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentUser = useContext(CurrentUserContext);
@@ -52,10 +52,10 @@ function Header({ handleAddClick, weatherData, handleLoginClick, handleRegisterC
           </>
         ) : (
           <>
-            <button onClick={handleLoginClick} className="header__button-login" type="button">
+            <button onClick={onLoginClick} className="header__button-login" type="button">
               Log In
             </button>
-            <button onClick={handleRegisterClick} className="header__button-register" type="button">
+            <button onClick={onRegisterClick} className="header__button-register" type="button">
               Sign Up
             </button>
           </>
