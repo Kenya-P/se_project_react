@@ -19,7 +19,8 @@ import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
 import ProtectedRoute from '../../contexts/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
-import mockApi from '../../utils/mockApi';
+import { use } from 'react';
+//import mockApi from '../../utils/mockApi';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -42,10 +43,12 @@ function App() {
   }
 
   const handleLoginClick = () => {
+    console.log("Login clicked");
     setActiveModal("login");
   }
 
   const handleRegisterClick = () => {
+    console.log("Register clicked");
     setActiveModal("register");
   }
 
@@ -128,10 +131,11 @@ function App() {
       .catch(console.error);
   }
 
-  const handleLogInUser = (userData) => {
-      const navigate = useNavigate();
+const navigate = useNavigate(); // Move this to component level
+
+const handleLogInUser = (userData) => {
     setIsLoading(true);
-    return api.loginUser(userData)
+    return api.logIn(userData)
     .then((res) => {
       if (res.token) {
         localStorage.setItem("jwt", res.token);
@@ -139,13 +143,13 @@ function App() {
         navigate("/profile");
       }
     })
-      .catch((error) => {
-        console.error("Error logging in user:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+    .catch((error) => {
+      console.error("Error logging in user:", error);
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+}
 
   const handleUpdateUser = ({ name, avatar }) => {
     api.updateUserProfile({ name, avatar })
@@ -158,12 +162,12 @@ function App() {
 
   const handleRegisterUser = (userData) => {
     setIsLoading(true);
-    return api.registerUser(userData)
+    return api.register(userData)
     .then((res) => {
       if (res.token) {
         localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
-        setCurrentUser({ name, email });
+        setCurrentUser(res.user);
         setIsRegisterModalOpen(false);
       }
     })
@@ -190,13 +194,20 @@ function App() {
     }).catch(console.error);
   }, []);
 
-  useEffect(() => {
-    api.getItems()
-    .then(data => {
+
+useEffect(() => {
+  if (!isLoggedIn) return;
+
+  api.getItems()
+    .then((data) => {
+      console.log("Fetched clothing items:", data);
       setClothingItems(data);
     })
-    .catch(console.error);
-  }, []);
+    .catch((error) => {
+      console.error("Error fetching clothing items:", error);
+    });
+}, [isLoggedIn]);
+
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -207,7 +218,7 @@ function App() {
         setIsLoggedIn(true);
       })
       .catch(() => {
-        handleLogout();
+        handleSignOutUser();
       });
     }
   }
