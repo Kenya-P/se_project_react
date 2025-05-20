@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import './App.css'
@@ -19,7 +19,6 @@ import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
 import ProtectedRoute from '../../contexts/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
-import { use } from 'react';
 //import mockApi from '../../utils/mockApi';
 
 function App() {
@@ -33,6 +32,7 @@ function App() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isEditProfileModalOpen, setEditProfileModalOpen] = useState(false);
   const [clothingItems, setClothingItems] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleToggleSwitchChange = () => {
     setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
@@ -213,32 +213,37 @@ const handleRegisterUser = (userData) => {
 
 
 useEffect(() => {
-  api.getItems()
-    .then((data) => {
+  const fetchItems = async () => {
+    try {
+      const data = await api.getItems();
       console.log("Fetched clothing items:", data);
-      setClothingItems(data);
-    })
-    .catch((error) => {
+      setClothingItems(data);  // Update the state with the fetched items
+    } catch (error) {
       console.error("Error fetching clothing items:", error);
-    });
-}, []);
+      // Optionally handle the error by showing a message to the user
+    }
+  };
 
+  fetchItems();
+}, []);  // This effect runs once when the component mounts
 
-
-  useEffect(() => {
+useEffect(() => {
+  const checkUserToken = async () => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      api.checkToken(token)
-      .then((user) => {
+      try {
+        const user = await api.checkToken(token);
         setCurrentUser(user);
         setIsLoggedIn(true);
-      })
-      .catch(() => {
-        handleSignOutUser();
-      });
+      } catch (error) {
+        console.error("Error checking token:", error);
+        handleSignOutUser();  // Sign out the user if the token is invalid
+      }
     }
-  }
-  , []);
+  };
+
+  checkUserToken();
+}, []);  // This effect also runs once when the component mounts
 
 
   return (
@@ -275,6 +280,7 @@ useEffect(() => {
                       clothingItems={clothingItems}
                       handleItemClick={handleItemClick}
                       onSignOutClick={handleSignOutUser}
+                      currentUser={currentUser}
                     />
                   </ProtectedRoute>
                 }

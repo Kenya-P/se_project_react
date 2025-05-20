@@ -45,7 +45,6 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
                     className="modal__input"
                     placeholder="Email"
                     required
-                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                     onChange={handleChange}
                     value={values.email}
                 />
@@ -63,7 +62,6 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
                     required
                     minLength="8"
                     maxLength="20"
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;,.<>?/-]).{8,}$"
                     title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
                     autoComplete="off"
                     autoCorrect="off"

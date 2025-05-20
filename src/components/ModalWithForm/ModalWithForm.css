@@ -128,6 +128,40 @@ font-weight: 700;
     opacity: 50%;
 }*/
 
+.modal__input-error {
+    color: #FF4D00;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+.modal__submit[disabled] {
+  background-color: #999;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal__submit[disabled]:hover {
+  opacity: 0.6; /* Keep the same opacity as disabled state */
+}
+
+.modal__buttons-container {
+  display: flex;
+  border: 0px;
+  align-items: center;
+  background: transparent;
+  gap: 10px;
+}
+
+.modal__secondary-button {
+  border: 0px;
+  align-items: center;
+  background: transparent;
+}
+
+
 @media  screen and (max-width: 627px) {
 
     .modal {

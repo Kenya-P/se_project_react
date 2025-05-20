@@ -10,7 +10,12 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
         errors,
         resetForm,
         isValid
-    } = useFormAndValidation();
+    } = useFormAndValidation({
+        name: '',
+        email: '',
+        password: '',
+        avatar: ''
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,36 +35,17 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
 
     return (
         <ModalWithForm
-            buttonText={isLoading ? "Saving..." : "Register"}
+            buttonText={isLoading ? "Saving..." : "Sign Up"}
             title="Sign up"
             name="register"
             isOpen={isOpen}
             onClose={handleClose}
+            onOverlayClose={handleClose}
             onSubmit={handleSubmit}
-            secondaryButtonText="Already a member? Sign Up"
+            secondaryButtonText={"or Log in"}
             secondaryButtonLink="/signin"
             secondaryButtonAction={onClickLogin}
         >
-            <label htmlFor="register-name" className="modal__label">
-                Name
-                <input
-                    id="register-name"
-                    name="name"
-                    type="text"
-                    className="modal__input"
-                    placeholder="Name"
-                    required
-                    minLength="2"
-                    maxLength="20"
-                    pattern="^[a-zA-Z0-9-_.,' ]+$"
-                    title="Name can only contain letters, numbers, and the following characters: - _ . , '"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    onChange={handleChange}
-                    value={values.name || ''}
-                />
-                <span className="modal__input-error">{errors.name}</span>
-            </label>
 
             <label htmlFor="register-email" className="modal__label">
                 Email
@@ -70,7 +56,6 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
                     className="modal__input"
                     placeholder="Email"
                     required
-                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                     onChange={handleChange}
                     value={values.email || ''}
                 />
@@ -88,14 +73,50 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
                     required
                     minLength="8"
                     maxLength="20"
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;,.<>?/-]).{8,}$"
-                    title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+                    title="Password must be at least 8 characters and and contain at least one letter and one number."
                     autoComplete="off"
                     autoCorrect="off"
                     onChange={handleChange}
                     value={values.password || ''}
                 />
                 <span className="modal__input-error">{errors.password}</span>
+            </label>
+
+            <label htmlFor="register-name" className="modal__label">
+                Name
+                <input
+                    id="register-name"
+                    name="name"
+                    type="text"
+                    className="modal__input"
+                    placeholder="Name"
+                    required
+                    minLength="2"
+                    maxLength="20"
+                    title="Name can only contain letters, numbers, and the following characters: - _ . , '"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    onChange={handleChange}
+                    value={values.name || ''}
+                />
+                <span className="modal__input-error">{errors.name}</span>
+            </label>
+
+            <label htmlFor="register-avatar" className="modal__label">
+                Avatar
+                <input
+                    id="register-avatar"
+                    name="avatar"
+                    type="url"
+                    className="modal__input"
+                    placeholder="Avatar URL"
+                    title="Please enter a valid URL."
+                    autoComplete="off"
+                    autoCorrect="off"
+                    onChange={handleChange}
+                    value={values.avatar || ''}
+                />
+                <span className="modal__input-error">{errors.avatar}</span>
             </label>
         </ModalWithForm>
     );
