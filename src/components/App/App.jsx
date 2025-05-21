@@ -196,7 +196,7 @@ const handleRegisterUser = (userData) => {
 };
 
 
-  const handleSignOutUser = () => {
+  const handleLogoutUser = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
     setCurrentUser({});
@@ -237,7 +237,7 @@ useEffect(() => {
         setIsLoggedIn(true);
       } catch (error) {
         console.error("Error checking token:", error);
-        handleSignOutUser();  // Sign out the user if the token is invalid
+        handleLogoutUser();  // Sign out the user if the token is invalid
       }
     }
   };
@@ -256,7 +256,7 @@ useEffect(() => {
               weatherData={weatherData}
               onLoginClick={handleLoginClick}
               onRegisterClick={handleRegisterClick}
-              onSignOutClick={handleSignOutUser}
+              onLogoutClick={handleLogoutUser}
               handleEditProfileClick={handleEditProfileClick}
             />
   
@@ -279,7 +279,7 @@ useEffect(() => {
                     <Profile
                       clothingItems={clothingItems}
                       handleItemClick={handleItemClick}
-                      onSignOutClick={handleSignOutUser}
+                      onLogoutClick={handleLogoutUser}
                       currentUser={currentUser}
                     />
                   </ProtectedRoute>

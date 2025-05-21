@@ -50,7 +50,6 @@
     border: none;
     background-color: transparent;
     font-size: 16px;
-
 }
 
 .header__user-container {
@@ -67,6 +66,36 @@
 .header__user-link {
     text-decoration: none;
     color: #000;
+}
+
+.header__buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header__login-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.header__logout-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.header__register-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
 }
 
 @media  screen and (max-width: 627px) {

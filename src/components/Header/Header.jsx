@@ -36,12 +36,9 @@ function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, ha
         <button className="header__mobile-menu_close" type="button" onClick={toggleMenu}></button>
         <ToggleSwitch />
         {isLoggedIn ? (
-          <>
+          <div>
             <button onClick={handleAddClick} type="button" className="header__clothes-button">
               + Add Clothes
-            </button>
-            <button onClick={handleLogoutClick} className="header__button-logout" type="button">
-              Log Out
             </button>
             <Link to="/profile" className="header__user-link">
               <div className="header__user-container">
@@ -49,16 +46,19 @@ function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, ha
                 {avatarContent}
               </div>
             </Link>
-          </>
+          </div>
         ) : (
-          <>
-            <button onClick={onLoginClick} className="header__button-login" type="button">
+          <div className="header__buttons-container">
+            <button onClick={onLoginClick} className="header__login-button" type="button">
               Log In
             </button>
-            <button onClick={onRegisterClick} className="header__button-register" type="button">
+            <button onClick={onRegisterClick} className="header__register-button" type="button">
               Sign Up
             </button>
-          </>
+            <button onClick={handleLogoutClick} className="header__logout-button" type="button">
+              Log Out
+            </button>
+          </div>
         )}
       </div>
     </header>

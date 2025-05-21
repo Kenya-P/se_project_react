@@ -3,10 +3,9 @@ import SideBar from '../SideBar/SideBar';
 import './Profile.css';
 import React, { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-//import EditProfileModal from '../EditProfileModal/EditProfileModal';
 
 
-function Profile({handleAddClick, clothingItems, onClick, handleEditProfileClick, onSignOutClick}) {
+function Profile({handleAddClick, clothingItems, handleEditProfileClick, onLogoutClick}) {
 
     const currentUser = useContext(CurrentUserContext);
     
@@ -17,14 +16,8 @@ function Profile({handleAddClick, clothingItems, onClick, handleEditProfileClick
                     <h1 className="profile__title">Hello, {currentUser.name}!</h1>
                 </div>
             </section>
-            <button className="profile__edit-button" type="button" onClick={handleEditProfileClick}>
-                Edit Profile
-            </button>
-            <button className="profile__signout-button" type="button" onClick={onSignOutClick}>
-                Sign Out
-            </button>
             <section className="profile__sidebar">
-                <SideBar />
+                <SideBar handleEditProfileClick={handleEditProfileClick} onLogoutClick={onLogoutClick}/>
             </section>
             <section className="profile__clothes-section" >
                 <ClothesSection clothingItems={clothingItems} onAddNew={handleAddClick} onItemClick={onClick}/>
