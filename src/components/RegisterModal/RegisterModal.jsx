@@ -24,6 +24,7 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
                 name: values.name,
                 email: values.email,
                 password: values.password,
+                avatar: values.avatar
             });
         }
     };

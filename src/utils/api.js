@@ -1,7 +1,4 @@
-const baseUrl = import.meta.env.MODE === "development"
-  ? "http://localhost:3001"
-  : "https://kenya-p.github.io/se_project_react";
-
+export const baseUrl = "http://localhost:3001";
   
 export function _handleResponse(res) {
   if (res.ok) {
@@ -87,39 +84,6 @@ function dislikeItem(itemId, token) {
     .catch((error) => Promise.reject(error));
 }
 
-function register({ name, avatar, email, password }) {
-  return fetch(`${baseUrl}/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, avatar, email, password }),
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
-
-function logIn({ email, password }) {
-  return fetch(`${baseUrl}/signin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
-
-/*function logOut() {
-  return fetch(`${baseUrl}/signout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}*/
-
 function updateUserProfile({ name, avatar, token }) {
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
@@ -135,26 +99,12 @@ function updateUserProfile({ name, avatar, token }) {
   .catch((error) => Promise.reject(error));
 }
 
-function checkToken(token) {
-  return fetch(`${baseUrl}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
-
 const api = {
     getItems,
     addItem,
     removeItem,
     likeItem,
     dislikeItem,
-    checkToken,
-    logIn,        // Note: it's logIn, not loginUser
-    register,     // Note: it's register, not registerUser
     updateUserProfile,
     _handleResponse
 };

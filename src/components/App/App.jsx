@@ -19,7 +19,7 @@ import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
 import ProtectedRoute from '../../contexts/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
-//import mockApi from '../../utils/mockApi';
+import {register, logIn, checkToken} from '../../utils/auth';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -131,16 +131,23 @@ function App() {
       .catch(console.error);
   }
 
-const navigate = useNavigate(); // Move this to component level
+const navigate = useNavigate();
 
 const handleLogInUser = (userData) => {
     setIsLoading(true);
-    return api.logIn(userData)
+    return logIn(userData)
     .then((res) => {
       if (res.token) {
         localStorage.setItem("jwt", res.token);
+        return checkToken(res.token);
+      }
+    })
+    .then((userData) => {
+      if (userData) {
+        setCurrentUser(userData);
         setIsLoggedIn(true);
         navigate("/profile");
+        closeActiveModal();
       }
     })
     .catch((error) => {
@@ -151,14 +158,23 @@ const handleLogInUser = (userData) => {
     });
 }
 
-  const handleUpdateUser = ({ name, avatar }) => {
-    api.updateUserProfile({ name, avatar })
+const handleUpdateUser = ({ name, avatar }) => {
+  const token = localStorage.setItem("jwt", localStorage.getItem("jwt"));
+  setIsLoading(true);
+    api.updateUserProfile({ name, avatar }, token)
       .then((updatedUser) => {
-        setCurrentUser(updatedUser);
+        setCurrentUser({
+          ...currentUser,
+          name: updatedUser.name,
+          avatar: updatedUser.avatar,
+        });
         closeActiveModal();
       })
-      .catch(console.error);
-  }
+      .catch(console.error)
+      .finally(() => {
+        setIsLoading(false);
+      });
+}
 
 const handleRegisterUser = (userData) => {
   // Start loading state
@@ -172,7 +188,14 @@ const handleRegisterUser = (userData) => {
   }
 
   // Send the data to the backend
-  return api.register(userData)
+  return register(userData)
+    .then(() => {
+      // After successful registration, log in the user
+      return logIn({ 
+        email: userData.email, 
+        password: userData.password
+      });
+    })
     .then((res) => {
       if (res.token) {
         // Successful registration, store JWT and user info
@@ -212,7 +235,7 @@ const handleRegisterUser = (userData) => {
   }, []);
 
 
-useEffect(() => {
+/*useEffect(() => {
   const fetchItems = async () => {
     try {
       const data = await api.getItems();
@@ -225,9 +248,18 @@ useEffect(() => {
   };
 
   fetchItems();
-}, []);  // This effect runs once when the component mounts
+}, []);  // This effect runs once when the component mounts */
 
-useEffect(() => {
+  useEffect(() => {
+    api
+      .getItems()
+      .then((data) => {
+        setClothingItems(data.reverse());
+      })
+      .catch(console.error);
+  }, []);
+
+/*useEffect(() => {
   const checkUserToken = async () => {
     const token = localStorage.getItem("jwt");
     if (token) {
@@ -243,7 +275,27 @@ useEffect(() => {
   };
 
   checkUserToken();
-}, []);  // This effect also runs once when the component mounts
+}, []);*/
+
+useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      checkToken(token)
+        .then((userData) => {
+          if (userData) {
+            setCurrentUser(userData);
+            setIsLoggedIn(true);
+          } else {
+            localStorage.removeItem("jwt");
+            setIsLoggedIn(false);
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("jwt");
+          setIsLoggedIn(false);
+        });
+    }
+  }, []);
 
 
   return (

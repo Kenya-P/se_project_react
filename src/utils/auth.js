@@ -1,41 +1,34 @@
-import { _handleResponse } from './api';
+import { _handleResponse, baseUrl } from "./api";
 
-const auth = { register, logIn, checkToken };
+// This file contains functions to handle user authentication
+// and authorization using the Fetch API.
 
-const baseUrl = 'http://localhost:3001';
-// const baseUrl = 'https://api.example.com';
-
-function register({ name, avatar, email, password }) {
+export const register = function ({ name, avatar, email, password }) {
   return fetch(`${baseUrl}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, avatar, email, password }),
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
+  }).then(_handleResponse);
+};
 
-function logIn({ email, password }) {
+export const logIn = function ({ email, password }) {
   return fetch(`${baseUrl}/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
+  }).then(_handleResponse);
+};
 
-function checkToken(token) {
-  return fetch(`${baseUrl}/users/me`, {
+export const checkToken = (token) => {
+  return fetch(`${baseUrl}/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
-
-export default auth;
+  }).then(_handleResponse);
+};
