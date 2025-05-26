@@ -4,7 +4,11 @@ import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import { useFormAndValidation } from '../../utils/useFormAndValidation';
 
 function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
-    const { values, handleChange, setValues, errors, isValid, resetForm } = useFormAndValidation();
+    const { values, handleChange, setValues, errors, isValid, resetForm } = 
+    useFormAndValidation({
+        email: '',
+        password: ''
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -46,7 +50,7 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
                     placeholder="Email"
                     required
                     onChange={handleChange}
-                    value={values.email}
+                    value={values.email || ''}
                 />
                 <span id="input-error" className="modal__input-error">{errors.email}</span>
             </label>
@@ -66,7 +70,7 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
                     autoComplete="off"
                     autoCorrect="off"
                     onChange={handleChange}
-                    value={values.password}
+                    value={values.password || ''}
                 />
                 <span id="input-error" className="modal__input-error">{errors.password}</span>
             </label>
