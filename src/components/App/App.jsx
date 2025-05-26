@@ -225,22 +225,25 @@ const handleUpdateUser = ({ name, avatar }) => {
 
 // Use Effects
 
-  useEffect(() => {
-    getWeather(coordinates, APIkey)
-    .then(data => {
-      const filteredData = filterWeatherData(data);
-      setWeatherData(filteredData);
-    }).catch(console.error);
-  }, []);
+useEffect(() => {
+  console.log("current user context updated:", currentUser);
+}, [currentUser]);
 
-  useEffect(() => {
-    api
-      .getItems()
-      .then((data) => {
-        setClothingItems(data.reverse());
-      })
-      .catch(console.error);
-  }, []);
+useEffect(() => {
+  getWeather(coordinates, APIkey)
+  .then(data => {
+    const filteredData = filterWeatherData(data);
+    setWeatherData(filteredData);
+  }).catch(console.error);
+}, []);
+
+useEffect(() => {
+  api.getItems()
+    .then((data) => {
+      setClothingItems(data.reverse());
+    })
+    .catch(console.error);
+}, []);
 
 useEffect(() => {
   const token = localStorage.getItem("jwt");

@@ -5,17 +5,18 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick, onLogoutClick }) {
+function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const currentUser = useContext(CurrentUserContext);
+  const {currentUser} = useContext(CurrentUserContext);
+
 
   const isLoggedIn = !!currentUser?._id;
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const avatarContent = currentUser?.avatar ? (
-    <img src={currentUser.avatar} alt="User avatar" className="header__avatar" />
+    <img src={currentUser.avatar} alt="User avatar" className="header__user-avatar" />
   ) : (
     <div className="header__avatar-placeholder">
       {currentUser?.name?.charAt(0)?.toUpperCase() || "?"}
