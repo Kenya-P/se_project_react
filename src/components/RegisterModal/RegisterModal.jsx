@@ -86,19 +86,15 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
             <label htmlFor="register-name" className="modal__label">
                 Name
                 <input
-                    id="register-name"
-                    name="name"
-                    type="text"
-                    className="modal__input"
-                    placeholder="Name"
-                    required
-                    minLength="2"
-                    maxLength="20"
-                    title="Name can only contain letters, numbers, and the following characters: - _ . , '"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    onChange={handleChange}
-                    value={values.name || ''}
+                type="text"
+                name="name"
+                className="modal__input"
+                placeholder="Name"
+                //pattern="^[a-zA-Z\s\-]+$"
+                title="Name should contain only letters, spaces or hyphens"
+                value={values.name || ''}
+                onChange={handleChange}
+                required
                 />
                 <span className="modal__input-error">{errors.name}</span>
             </label>

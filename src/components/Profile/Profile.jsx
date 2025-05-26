@@ -5,7 +5,7 @@ import React, { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 
-function Profile({handleAddClick, clothingItems, handleEditProfileClick, onLogoutClick}) {
+function Profile({handleAddClick, clothingItems, handleEditProfileClick, onLogoutClick, onClick}) {
 
     const currentUser = useContext(CurrentUserContext);
     

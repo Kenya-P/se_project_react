@@ -1,7 +1,7 @@
 import './SideBar.css';
 import Avatar from '../../assets/Avatar.svg';
 
-function SideBar(handleEditProfileClick, onLogoutClick) {
+function SideBar({handleEditProfileClick, onLogoutClick}) {
     return (
         <div className="sidebar">
             <img className="sidebar__avatar" src={Avatar} alt="Avatar Image" />

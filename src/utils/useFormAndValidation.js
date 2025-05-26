@@ -23,8 +23,10 @@ const validationConfig = {
     },
 };
 
-export function useFormAndValidation() {
-    const [values, setValues] = useState({});
+export function useFormAndValidation(initialValues = {}) {
+    // Initialize state for form values, errors, and validity
+    // using the initial values passed to the hook
+    const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
     const [isValid, setIsValid] = useState(false);
 

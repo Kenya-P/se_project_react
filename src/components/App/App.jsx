@@ -19,7 +19,7 @@ import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
 import ProtectedRoute from '../../contexts/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
-import {register, logIn, checkToken} from '../../utils/auth';
+import * as auth from '../../utils/auth';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -29,17 +29,26 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [isEditProfileModalOpen, setEditProfileModalOpen] = useState(false);
   const [clothingItems, setClothingItems] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleToggleSwitchChange = () => {
+//Modal
+const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+const [isItemModalOpen, setIsItemModalOpen] = useState(false);
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+
+
+const handleToggleSwitchChange = () => {
     setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
   }
 
   const handleAddClick = () => {
-    setActiveModal("add-garment")
+    //setActiveModal("add-garment")
+    setIsAddItemModalOpen(true);
   }
 
   const handleLoginClick = () => {
@@ -54,6 +63,12 @@ function App() {
 
   const closeActiveModal = () => {
     setActiveModal("");
+    setIsAddModalOpen(false);
+    setIsLoginModalOpen(false);
+    setIsRegisterModalOpen(false);
+    setIsEditProfileModalOpen(false);
+    setIsItemModalOpen(false);
+    setIsDeleteModalOpen(false);
   }
 
   useEffect(() => {
@@ -133,28 +148,27 @@ function App() {
 
 const navigate = useNavigate();
 
-const handleLogInUser = (userData) => {
+const handleLogInUser = ({ email, password }) => {
     setIsLoading(true);
-    return logIn(userData)
-    .then((res) => {
-      if (res.token) {
+  auth.logIn({ email, password })
+  .then((res) => {
+    if (res.token) {
         localStorage.setItem("jwt", res.token);
-        return checkToken(res.token);
+        setIsLoggedIn(true);
+        return auth.checkToken(res.token);
       }
     })
     .then((userData) => {
-      if (userData) {
-        setCurrentUser(userData);
-        setIsLoggedIn(true);
-        navigate("/profile");
-        closeActiveModal();
-      }
+      setCurrentUser(userData);
+      navigate("/");
     })
-    .catch((error) => {
-      console.error("Error logging in user:", error);
+    .catch((err) => {
+      console.error("Login failed:", err);
+      // optionally set error message for display
     })
     .finally(() => {
       setIsLoading(false);
+      closeActiveModal();
     });
 }
 
@@ -176,47 +190,30 @@ const handleUpdateUser = ({ name, avatar }) => {
       });
 }
 
-const handleRegisterUser = (userData) => {
-  // Start loading state
-  setIsLoading(true);
+  const handleRegisterUser = ({ name, avatar, email, password }) => {
+    setIsLoading(true);
 
-  // Validate the user data before sending it
-  if (!userData.name || !userData.email || !userData.password) {
-    console.error("Please fill in all fields");
-    setIsLoading(false);
-    return;
-  }
-
-  // Send the data to the backend
-  return register(userData)
-    .then(() => {
-      // After successful registration, log in the user
-      return logIn({ 
-        email: userData.email, 
-        password: userData.password
+    auth.register({ name, avatar, email, password })
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setIsLoggedIn(true);
+          return auth.checkToken(res.token);
+        }
+      })
+      .then((userData) => {
+        setCurrentUser(userData);
+        navigate("/profile");
+      })
+      .catch((err) => {
+        console.error("Registration failed:", err);
+        // optionally: set error message state
+      })
+      .finally(() => {
+        setIsLoading(false);
+        closeActiveModal();
       });
-    })
-    .then((res) => {
-      if (res.token) {
-        // Successful registration, store JWT and user info
-        localStorage.setItem("jwt", res.token);
-        setIsLoggedIn(true);
-        setCurrentUser(res.user);
-        setIsRegisterModalOpen(false);
-      }
-    })
-    .catch((error) => {
-      // Handle different types of errors (e.g., email already exists)
-      if (error.response && error.response.status === 409) {
-        console.error("User with this email already exists");
-      } else {
-        console.error("Error registering user:", error);
-      }
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-};
+}
 
 
   const handleLogoutUser = () => {
@@ -226,6 +223,8 @@ const handleRegisterUser = (userData) => {
     navigate("/");
   }
 
+// Use Effects
+
   useEffect(() => {
     getWeather(coordinates, APIkey)
     .then(data => {
@@ -233,22 +232,6 @@ const handleRegisterUser = (userData) => {
       setWeatherData(filteredData);
     }).catch(console.error);
   }, []);
-
-
-/*useEffect(() => {
-  const fetchItems = async () => {
-    try {
-      const data = await api.getItems();
-      console.log("Fetched clothing items:", data);
-      setClothingItems(data);  // Update the state with the fetched items
-    } catch (error) {
-      console.error("Error fetching clothing items:", error);
-      // Optionally handle the error by showing a message to the user
-    }
-  };
-
-  fetchItems();
-}, []);  // This effect runs once when the component mounts */
 
   useEffect(() => {
     api
@@ -259,43 +242,22 @@ const handleRegisterUser = (userData) => {
       .catch(console.error);
   }, []);
 
-/*useEffect(() => {
-  const checkUserToken = async () => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      try {
-        const user = await api.checkToken(token);
-        setCurrentUser(user);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error checking token:", error);
-        handleLogoutUser();  // Sign out the user if the token is invalid
-      }
-    }
-  };
-
-  checkUserToken();
-}, []);*/
-
 useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (token) {
-      checkToken(token)
-        .then((userData) => {
-          if (userData) {
-            setCurrentUser(userData);
-            setIsLoggedIn(true);
-          } else {
-            localStorage.removeItem("jwt");
-            setIsLoggedIn(false);
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem("jwt");
-          setIsLoggedIn(false);
-        });
-    }
-  }, []);
+  const token = localStorage.getItem("jwt");
+  if (!token) return;
+
+  auth.checkToken(token)
+    .then((userData) => {
+      setIsLoggedIn(true);
+      setCurrentUser(userData);
+    })
+    .catch((err) => {
+      console.error("Token check failed:", err);
+      setIsLoggedIn(false);
+      localStorage.removeItem("jwt");
+    });
+}, []);
+
 
 
   return (
@@ -304,7 +266,7 @@ useEffect(() => {
         <div className="page">
           <div className="page__content">
             <Header
-              handleAddClick={handleAddClick}
+              onAddClick={handleAddClick}
               weatherData={weatherData}
               onLoginClick={handleLoginClick}
               onRegisterClick={handleRegisterClick}
@@ -333,6 +295,7 @@ useEffect(() => {
                       handleItemClick={handleItemClick}
                       onLogoutClick={handleLogoutUser}
                       currentUser={currentUser}
+                      onEditProfileClick={handleEditProfileClick}
                     />
                   </ProtectedRoute>
                 }
@@ -343,7 +306,7 @@ useEffect(() => {
           </div>
   
           <AddItemModal
-            isOpen={activeModal === "add-garment"}
+            isOpen={isAddItemModalOpen}
             onClose={closeActiveModal}
             onAddItemModalSubmit={handleAddItemModalSubmit}
             isLoading={isLoading}

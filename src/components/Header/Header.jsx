@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, handleLogoutClick }) {
+function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick, onLogoutClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentUser = useContext(CurrentUserContext);
@@ -37,13 +37,13 @@ function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, ha
         <ToggleSwitch />
         {isLoggedIn ? (
           <div>
-            <button onClick={handleAddClick} type="button" className="header__clothes-button">
+            <button onClick={onAddClick} type="button" className="header__clothes-button">
               + Add Clothes
             </button>
             <Link to="/profile" className="header__user-link">
               <div className="header__user-container">
-                <p className="header__username">{currentUser.name}</p>
                 {avatarContent}
+                <p className="header__username">{currentUser.name}</p>
               </div>
             </Link>
           </div>
@@ -54,9 +54,6 @@ function Header({ handleAddClick, weatherData, onLoginClick, onRegisterClick, ha
             </button>
             <button onClick={onRegisterClick} className="header__register-button" type="button">
               Sign Up
-            </button>
-            <button onClick={handleLogoutClick} className="header__logout-button" type="button">
-              Log Out
             </button>
           </div>
         )}

@@ -10,7 +10,7 @@ export function useForm(inputValues) {
       // set the value into the object using the name
       setValues({...values, [name]: value});
 
-      if (values.trim() === '') {
+      if (value.trim() === '') {
         setErrors({...errors, [name]: 'This field is required'});
       } else {
         const newErrors = {...errors};
