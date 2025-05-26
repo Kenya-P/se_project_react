@@ -132,7 +132,7 @@ const handleToggleSwitchChange = () => {
   
 
   const handleEditProfileClick = () => {
-    setEditProfileModalOpen(true);
+    setIsEditProfileModalOpen(true);
   }
 
   const handleDeleteItemModalSubmit = () => {
@@ -150,7 +150,7 @@ const navigate = useNavigate();
 
 const handleLogInUser = ({ email, password }) => {
     setIsLoading(true);
-  auth.logIn({ email, password })
+  return auth.logIn({ email, password })
   .then((res) => {
     if (res.token) {
         localStorage.setItem("jwt", res.token);
@@ -160,7 +160,7 @@ const handleLogInUser = ({ email, password }) => {
     })
     .then((userData) => {
       setCurrentUser(userData);
-      navigate("/");
+      navigate("/profile");
     })
     .catch((err) => {
       console.error("Login failed:", err);
@@ -338,7 +338,7 @@ useEffect(() => {
           />
           <EditProfileModal
             isOpen={isEditProfileModalOpen}
-            onClose={() => setEditProfileModalOpen(false)}
+            onClose={closeActiveModal}
             onUpdateUser={handleUpdateUser}
             isLoading={isLoading}
           />
