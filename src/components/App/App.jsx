@@ -139,17 +139,21 @@ const handleToggleSwitchChange = () => {
     setIsEditProfileModalOpen(true);
   }
 
-  const handleDeleteItemModalSubmit = () => {
-    api.removeItem(selectedItem._id)
+  const handleDeleteItem = () => {
+    const token = localStorage.getItem("jwt");
+    setIsLoading(true);
+
+
+    return api.removeItem(selectedItem._id, token)
       .then(() => {
         setClothingItems((prevItems) =>
           prevItems.filter((item) => item._id !== selectedItem._id)
         );
         closeActiveModal();
       })
-      .catch(console.error);
-  }
-
+    .catch((err) => console.error("Delete error:", err))
+    .finally(() => setIsLoading(false));
+};
 const navigate = useNavigate();
 
 const handleLogInUser = ({ email, password }) => {
@@ -326,18 +330,18 @@ useEffect(() => {
           />
           <DeleteItemModal
             activeModal={activeModal}
-            isOpen={activeModal === "delete"}
+            isOpen={activeModal === "delete" || isDeleteModalOpen}
             onClose={closeActiveModal}
-            onClick={handleDeleteItemModalSubmit}
+            onClick={handleDeleteItem}
           />
           <RegisterModal
-            isOpen={activeModal === "register"}
+            isOpen={activeModal === "register" || isRegisterModalOpen}
             onClose={closeActiveModal}
             onRegister={handleRegisterUser}
             isLoading={isLoading}
           />
           <LoginModal
-            isOpen={activeModal === "login"}
+            isOpen={activeModal === "login" || isLoginModalOpen}
             onClose={closeActiveModal}
             onLogin={handleLogInUser}
             isLoading={isLoading}
