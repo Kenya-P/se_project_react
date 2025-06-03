@@ -47,7 +47,7 @@ const handleToggleSwitchChange = () => {
   }
 
   const handleAddClick = () => {
-    //setActiveModal("add-garment")
+    setActiveModal("add-garment")
     setIsAddItemModalOpen(true);
   }
 
@@ -91,6 +91,7 @@ const handleToggleSwitchChange = () => {
   const handleItemClick = (item) => {
     setActiveModal("preview");
     setSelectedItem(item);
+    setIsItemModalOpen(true);
   }
 
   const handleDeleteClick = (itemId) => {
@@ -98,16 +99,17 @@ const handleToggleSwitchChange = () => {
     setActiveModal("delete");
     }
 
-  const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
+  const handleAddItem = (itemData) => {
+    const token = localStorage.getItem("jwt");
     setIsLoading(true);
-    return api.addItem({ name, imageUrl, weather })
-    .then((newItem) => {
-      setClothingItems((prevItems) => [newItem, ...prevItems]);
-      closeActiveModal();
-    }).catch(console.error).finally(() => {
-      setIsLoading(false);
-    });
-  }
+    return api.addItem(itemData, token)
+      .then((newItem) => {
+        setClothingItems([newItem, ...clothingItems]);
+        closeActiveModal();
+      })
+      .catch(err => console.error("Add item failed:", err))
+      .finally(() => setIsLoading(false));
+};
 
   const handleLikeItem = (item) => {
     const token = localStorage.getItem("jwt");
@@ -132,6 +134,8 @@ const handleToggleSwitchChange = () => {
   
 
   const handleEditProfileClick = () => {
+    console.log("Edit profile clicked");
+    setActiveModal("edit-profile");
     setIsEditProfileModalOpen(true);
   }
 
@@ -157,6 +161,8 @@ const handleLogInUser = ({ email, password }) => {
         setIsLoggedIn(true);
         return auth.checkToken(res.token);
       }
+      closeActiveModal();
+
     })
     .then((userData) => {
       setCurrentUser(userData);
@@ -168,27 +174,26 @@ const handleLogInUser = ({ email, password }) => {
     })
     .finally(() => {
       setIsLoading(false);
-      closeActiveModal();
     });
 }
 
-const handleUpdateUser = ({ name, avatar }) => {
-  const token = localStorage.setItem("jwt", localStorage.getItem("jwt"));
+const handleUpdateUser = (updatedData) => {
+  const token = localStorage.getItem("jwt");
   setIsLoading(true);
-    api.updateUserProfile({ name, avatar }, token)
+    api.updateUserProfile(updatedData, token)
       .then((updatedUser) => {
-        setCurrentUser({
-          ...currentUser,
-          name: updatedUser.name,
-          avatar: updatedUser.avatar,
-        });
+        setCurrentUser(updatedUser);
         closeActiveModal();
+        setErrorMessage(""); // if used
       })
-      .catch(console.error)
+      .catch((err) => {
+        console.error("Update failed:", err);
+        setErrorMessage(err.message); // optional
+      })
       .finally(() => {
         setIsLoading(false);
       });
-}
+  }
 
   const handleRegisterUser = ({ name, avatar, email, password }) => {
     setIsLoading(true);
@@ -200,6 +205,7 @@ const handleUpdateUser = ({ name, avatar }) => {
           setIsLoggedIn(true);
           return auth.checkToken(res.token);
         }
+        closeActiveModal();
       })
       .then((userData) => {
         setCurrentUser(userData);
@@ -211,7 +217,6 @@ const handleUpdateUser = ({ name, avatar }) => {
       })
       .finally(() => {
         setIsLoading(false);
-        closeActiveModal();
       });
 }
 
@@ -224,10 +229,6 @@ const handleUpdateUser = ({ name, avatar }) => {
   }
 
 // Use Effects
-
-useEffect(() => {
-  console.log("current user context updated:", currentUser);
-}, [currentUser]);
 
 useEffect(() => {
   getWeather(coordinates, APIkey)
@@ -295,10 +296,12 @@ useEffect(() => {
                   <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <Profile
                       clothingItems={clothingItems}
-                      handleItemClick={handleItemClick}
+                      onClick={handleItemClick}
                       onLogoutClick={handleLogoutUser}
                       currentUser={currentUser}
-                      onEditProfileClick={handleEditProfileClick}
+                      handleEditProfileClick={handleEditProfileClick}
+                      handleAddClick={handleAddClick}
+                      onCardLike={handleLikeItem}
                     />
                   </ProtectedRoute>
                 }
@@ -309,14 +312,14 @@ useEffect(() => {
           </div>
   
           <AddItemModal
-            isOpen={isAddItemModalOpen}
+            isOpen={activeModal === "add-garment" || isAddItemModalOpen}
             onClose={closeActiveModal}
-            onAddItemModalSubmit={handleAddItemModalSubmit}
+            onAddItemModalSubmit={handleAddItem}
             isLoading={isLoading}
           />
           <ItemModal
             activeModal={activeModal}
-            isOpen={activeModal === "preview"}
+            isOpen={activeModal === "preview" || isItemModalOpen}
             onClose={closeActiveModal}
             item={selectedItem}
             handleDeleteClick={handleDeleteClick}
@@ -339,12 +342,12 @@ useEffect(() => {
             onLogin={handleLogInUser}
             isLoading={isLoading}
           />
-          <EditProfileModal
-            isOpen={isEditProfileModalOpen}
-            onClose={closeActiveModal}
-            onUpdateUser={handleUpdateUser}
-            isLoading={isLoading}
-          />
+            <EditProfileModal
+              isOpen={activeModal === "edit-profile" || isEditProfileModalOpen}
+              onClose={closeActiveModal}
+              onUpdateUser={handleUpdateUser}
+              currentUser={currentUser}
+            />
         </div>
       </CurrentUserContext.Provider>
     </CurrentTempUnitContext.Provider>

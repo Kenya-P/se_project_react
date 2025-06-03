@@ -14,6 +14,8 @@ export function _handleResponse(res) {
 function getItems() {
   const token = localStorage.getItem('jwt');
   if (!token) {
+    console.log("Sending token:", token);
+
     console.warn("JWT token missing; skipping item fetch.");
     return Promise.resolve([]); // Avoid fetch if token is missing
   }
@@ -33,11 +35,12 @@ function getItems() {
 }
 
 
-function addItem({ name, imageUrl, weather }) {
+function addItem({ name, imageUrl, weather }, token) {
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       name: name,
@@ -84,7 +87,7 @@ function dislikeItem(itemId, token) {
     .catch((error) => Promise.reject(error));
 }
 
-function updateUserProfile({ name, avatar, token }) {
+function updateUserProfile({ name, avatar }, token) {
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
@@ -96,8 +99,9 @@ function updateUserProfile({ name, avatar, token }) {
       avatar: avatar,
     }),
   }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
+    .catch((error) => Promise.reject(error));
 }
+
 
 const api = {
     getItems,
