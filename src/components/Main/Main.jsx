@@ -6,7 +6,8 @@ import { useContext } from 'react';
 
 
 
-function Main({ weatherData, handleItemClick, clothingItems, onCardLike }) {
+function Main({ weatherData, handleItemClick, clothingItems, onItemLike }) {
+  // Use the CurrentTempUnitContext to get the current temperature unit
   const { currentTempUnit } = useContext(CurrentTempUnitContext);
 
   const handleRandomizeClick = () => {
@@ -31,7 +32,7 @@ function Main({ weatherData, handleItemClick, clothingItems, onCardLike }) {
         {clothingItems.filter((item) => {
           return item.weather === weatherData.type;
         }).map((item) => {
-          return <ItemCard key={item._id} item={item} onItemClick={handleItemClick} onCardLike={onCardLike}/>;
+          return <ItemCard key={item._id} item={item} onItemClick={handleItemClick} onItemLike={onItemLike}/>;
         })}
       </ul>
       <button className="cards__randomize-button" type="button" onClick={handleRandomizeClick} >Randomize</button>

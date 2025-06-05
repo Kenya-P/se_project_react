@@ -2,17 +2,16 @@ import './ItemCard.css';
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function ItemCard({ item, onItemClick, onCardLike }) {
+function ItemCard({ item, onItemClick, onItemLike }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const isLiked = item.likes.some(id => id === currentUser._id);
-  const likeButtonClassName = `card__like-button ${isLiked ? 'card__like-button_active' : ''}`;
+  const isLiked = currentUser && item.likes.some(id => id === currentUser._id);
 
   const handleCardClick = () => {
     onItemClick(item);
   };
 
-  const handleLike = () => {
-    onCardLike(item); // Call prop with item object
+  const handleLikeClick = () => {
+    onItemLike({ _id: item._id, isLiked }); // Call prop with item object
   };
 
   return (
@@ -28,10 +27,9 @@ function ItemCard({ item, onItemClick, onCardLike }) {
       {currentUser._id && (
         <button
           type="button"
-          className={likeButtonClassName}
-          onClick={handleLike}
-          aria-label={isLiked ? 'Unlike item' : 'Like item'}
-        />
+          className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
+          onClick={handleLikeClick}
+        ></button>
       )}
     </li>
   );

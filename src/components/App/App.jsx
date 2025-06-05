@@ -111,7 +111,7 @@ const handleToggleSwitchChange = () => {
       .finally(() => setIsLoading(false));
 };
 
-  const handleLikeItem = (item) => {
+  const handleLikeClickItem = (item) => {
     const token = localStorage.getItem("jwt");
     const isLiked = item.likes.includes(currentUser._id);
   
@@ -290,7 +290,7 @@ useEffect(() => {
                     weatherData={weatherData}
                     handleItemClick={handleItemClick}
                     clothingItems={clothingItems}
-                    onCardLike={handleLikeItem}
+                    onItemLike={handleLikeItem}
                   />
                 }
               />
@@ -305,7 +305,7 @@ useEffect(() => {
                       currentUser={currentUser}
                       handleEditProfileClick={handleEditProfileClick}
                       handleAddClick={handleAddClick}
-                      onCardLike={handleLikeItem}
+                      onItemLike={handleLikeItem}
                     />
                   </ProtectedRoute>
                 }
