@@ -14,7 +14,6 @@ export default function AddItemModal({isOpen, onClose, onAddItemModalSubmit, isL
         onAddItemModalSubmit(values)
         .then(() => {
             setValues({name: "", imageUrl: "", weather: ""});
-            onClose();
         })
         .catch((error) => {
             console.error(error);

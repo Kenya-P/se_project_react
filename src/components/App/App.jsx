@@ -52,18 +52,16 @@ const handleToggleSwitchChange = () => {
   }
 
   const handleLoginClick = () => {
-    console.log("Login clicked");
     setActiveModal("login");
   }
 
   const handleRegisterClick = () => {
-    console.log("Register clicked");
     setActiveModal("register");
   }
 
   const closeActiveModal = () => {
     setActiveModal("");
-    setIsAddModalOpen(false);
+    setIsAddItemModalOpen(false);
     setIsLoginModalOpen(false);
     setIsRegisterModalOpen(false);
     setIsEditProfileModalOpen(false);
@@ -102,24 +100,25 @@ const handleToggleSwitchChange = () => {
   const handleAddItem = (itemData) => {
     const token = localStorage.getItem("jwt");
     setIsLoading(true);
+
     return api.addItem(itemData, token)
       .then((newItem) => {
         setClothingItems([newItem, ...clothingItems]);
-        closeActiveModal();
       })
       .catch(err => console.error("Add item failed:", err))
-      .finally(() => setIsLoading(false));
-};
+      .finally(() => {
+        closeActiveModal();
+        setIsLoading(false);
+      });
+  };
 
-  const handleLikeClickItem = (item) => {
+
+  const handleLikeItem = ({ _id, isLiked }) => {
     const token = localStorage.getItem("jwt");
-    const isLiked = item.likes.includes(currentUser._id);
-  
-    const likeAction = isLiked
-      ? api.dislikeItem(item._id, token)
-      : api.likeItem(item._id, token);
-  
-    likeAction
+
+    const likeAction = isLiked ? api.dislikeItem : api.likeItem;
+
+    likeAction(_id, token)
       .then((updatedItem) => {
         setClothingItems((prevItems) =>
           prevItems.map((item) =>
@@ -131,10 +130,9 @@ const handleToggleSwitchChange = () => {
         console.error("Error updating like status:", err);
       });
   };
-  
 
+  
   const handleEditProfileClick = () => {
-    console.log("Edit profile clicked");
     setActiveModal("edit-profile");
     setIsEditProfileModalOpen(true);
   }

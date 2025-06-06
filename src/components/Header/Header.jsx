@@ -8,7 +8,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {currentUser} = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
 
 
   const isLoggedIn = !!currentUser?._id;

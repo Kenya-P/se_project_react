@@ -11,26 +11,28 @@ function ItemCard({ item, onItemClick, onItemLike }) {
   };
 
   const handleLikeClick = () => {
-    onItemLike({ _id: item._id, isLiked }); // Call prop with item object
+    onItemLike({ _id: item._id, isLiked });
   };
 
   return (
     <li className="card">
-      <h2 className="card__name">{item.name}</h2>
       <img
         onClick={handleCardClick}
         className="card__image"
         src={item.imageUrl}
         alt={item.name}
       />
-      {/* Show like button only if user is logged in */}
-      {currentUser._id && (
-        <button
-          type="button"
-          className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
-          onClick={handleLikeClick}
-        ></button>
-      )}
+      <div className="card__info">
+        <h2 className="card__name">{item.name}</h2>
+        {/* Show like button only if user is logged in */}
+        {currentUser._id && (
+          <button
+            type="button"
+            className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
+            onClick={handleLikeClick}
+          ></button>
+        )}
+      </div>
     </li>
   );
 }

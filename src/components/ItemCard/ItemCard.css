@@ -13,14 +13,13 @@
     height: 24px;
     border-radius: 4px;
     background-color: #fff;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 20px;
     color: rgba(0, 0, 0, 0.6);
     top: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
 }
 
 .card__image {
@@ -31,50 +30,32 @@
 }
 
 .card__like-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 24px;
-  height: 24px;
-  background-image: url('../../assets/like-button.svg');
-  background: transparent no-repeat center center;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  width: 18px;
+  height: 15px;
+  background: url('../../assets/like-button.svg') transparent no-repeat center center;
+  background-size: contain;
   border: none;
   cursor: pointer;
 }
 
 .card__like-button:hover {
-    transform: scale(1.1);
+    opacity: 0.4;
 }
 
 .card__like-button:active {
     transform: scale(0.9);
-    background-image: url('../../assets/liked-button.svg');
+    background: url('../../assets/liked-button.svg') transparent no-repeat center center;
 }
 
-.card__like-button:focus {
-    outline: none;
-}
-
-.card__like-button:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 2px;
-}
-
-.card__like-button:focus-visible:hover {
-    transform: scale(1.1);
-}
-
-.card__like-button:focus-visible:active {
-    transform: scale(0.9);
-}
-
-.card__like-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.card__like-button:disabled:hover {
-    transform: none;
+.card__info {
+    position: absolute;
+    top: 15px;
+    gap: 4px;
+    display: flex;
+    align-items: center;
 }
 
 @media  screen and (max-width: 627px) {
