@@ -3,7 +3,7 @@ import ItemCard from '../ItemCard/ItemCard';
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function ClothesSection({ onAddNew, onItemClick, clothingItems }) {
+function ClothesSection({ onAddNew, onItemClick, clothingItems, onItemLike }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   // Filter items that belong to the current user
@@ -17,7 +17,7 @@ function ClothesSection({ onAddNew, onItemClick, clothingItems }) {
       </div>
       <ul className="clothes__section-list">
         {userItems.map((item) => (
-          <ItemCard key={item._id} item={item} onItemClick={onItemClick} />
+          <ItemCard key={item._id} item={item} onItemClick={onItemClick} onItemLike={onItemLike}/>
         ))}
       </ul>
     </div>

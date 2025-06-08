@@ -100,7 +100,7 @@ const handleDeleteClick = (itemId) => {
 
   
 const handleAddItem = (item) => {
-  const makeRequest = () => addItem(item);
+  const makeRequest = () => api.addItem(item);
 
   handleSubmit(makeRequest, {
     onLoading: setIsLoading,
@@ -113,21 +113,21 @@ const handleAddItem = (item) => {
 
 
 const handleLikeItem = ({ _id, isLiked }) => {
-
   const likeAction = isLiked ? api.dislikeItem : api.likeItem;
 
-  likeAction(_id)
-    .then((updatedItem) => {
+  const makeRequest = () => likeAction(_id);
+
+  handleSubmit(makeRequest, {
+    onSuccess: (updatedItem) => {
       setClothingItems((prevItems) =>
         prevItems.map((item) =>
           item._id === updatedItem._id ? updatedItem : item
         )
       );
-    })
-    .catch((err) => {
-      console.error("Error updating like status:", err);
-    });
+    }
+  });
 };
+
 
   
 const handleEditProfileClick = () => {
@@ -177,30 +177,29 @@ function handleUpdateUser(inputValues) {
 }
 
 
-  const handleRegisterUser = ({ name, avatar, email, password }) => {
-    setIsLoading(true);
+const handleRegisterUser = ({ name, avatar, email, password }) => {
+  const makeRequest = () => auth.register({ name, avatar, email, password });
 
-    auth.register({ name, avatar, email, password })
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem("jwt", res.token);
-          setIsLoggedIn(true);
-          return auth.checkToken(res.token);
-        }
-        closeActiveModal();
-      })
-      .then((userData) => {
-        setCurrentUser(userData);
-        navigate("/profile");
-      })
-      .catch((err) => {
-        console.error("Registration failed:", err);
-        // optionally: set error message state
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-}
+  handleSubmit(makeRequest, {
+    onLoading: setIsLoading,
+    onSuccess: (res) => {
+      if (res.token) {
+        localStorage.setItem("jwt", res.token);
+        setIsLoggedIn(true);
+        auth.checkToken(res.token)
+          .then((userData) => {
+            setCurrentUser(userData);
+            navigate("/profile");
+            closeActiveModal();
+          });
+      }
+    },
+    onError: (err) => {
+      console.error("Registration failed:", err);
+    }
+  });
+};
+
 
 
 const handleLogoutUser = () => {
@@ -280,7 +279,6 @@ useEffect(() => {
                       clothingItems={clothingItems}
                       onClick={handleItemClick}
                       onLogoutClick={handleLogoutUser}
-                      currentUser={currentUser}
                       handleEditProfileClick={handleEditProfileClick}
                       handleAddClick={handleAddClick}
                       onItemLike={handleLikeItem}
@@ -311,6 +309,7 @@ useEffect(() => {
             isOpen={activeModal === "delete" || isDeleteModalOpen}
             onClose={closeActiveModal}
             onClick={handleDeleteItem}
+            itemId={selectedItem._id}
           />
           <RegisterModal
             isOpen={activeModal === "register" || isRegisterModalOpen}
@@ -328,7 +327,6 @@ useEffect(() => {
               isOpen={activeModal === "edit-profile" || isEditProfileModalOpen}
               onClose={closeActiveModal}
               onUpdateUser={handleUpdateUser}
-              currentUser={currentUser}
             />
         </div>
       </CurrentUserContext.Provider>

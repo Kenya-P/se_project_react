@@ -12,12 +12,6 @@ export default function AddItemModal({isOpen, onClose, onAddItemModalSubmit, isL
     const handleSubmit = (e) => {
         e.preventDefault();
         onAddItemModalSubmit(values)
-        .then(() => {
-            setValues({name: "", imageUrl: "", weather: ""});
-        })
-        .catch((error) => {
-            console.error(error);
-        });
     }
 
     return (

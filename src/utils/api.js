@@ -35,7 +35,7 @@ function getItems() {
 }
 
 
-function addItem(name, imageUrl, weather) {
+function addItem({name, imageUrl, weather}) {
   const token = localStorage.getItem("jwt");
   return fetch(`${baseUrl}/items`, {
     method: "POST",
@@ -87,7 +87,7 @@ function dislikeItem(itemId) {
     .catch((error) => Promise.reject(error));
 }
 
-function updateUserProfile(name, avatar) {
+function updateUserProfile({name, avatar}) {
   const token = localStorage.getItem("jwt");
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
