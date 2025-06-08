@@ -9,7 +9,7 @@ function ItemModal({ activeModal, item, handleDeleteClick, isOpen, onClose }) {
 
     if (!item) return null; // Prevents rendering when no item is selected
 
-    const isOwner = item.owner === currentUser._id;
+    const isOwner = item?.owner === currentUser?._id;
     const itemDeleteButton = `modal__delete-button ${isOwner ? '' : 'modal__delete-button_hidden'}`;
 
     return (

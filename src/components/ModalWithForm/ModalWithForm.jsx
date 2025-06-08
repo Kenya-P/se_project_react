@@ -24,7 +24,7 @@ function ModalWithForm({children, buttonText, title, isOpen, onClose, name, onSu
                         >
                             {buttonText}
                         </button>
-                        {secondaryButtonText && (
+                            {secondaryButtonText && secondaryButtonAction && (
                             <button
                                 type="button"
                                 className="modal__secondary-button"
@@ -32,7 +32,7 @@ function ModalWithForm({children, buttonText, title, isOpen, onClose, name, onSu
                             >
                                 {secondaryButtonText}
                             </button>
-                        )}
+                            )}
                     </div>
                 </form>
             </div>

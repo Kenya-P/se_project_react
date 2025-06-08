@@ -60,6 +60,16 @@ const handleRegisterClick = () => {
   setActiveModal("register");
 }
 
+const handleSwitchToRegister = () => {
+  closeActiveModal();
+  setActiveModal("register");
+}
+
+const handleSwitchToLogin = () => {
+  closeActiveModal();
+  setActiveModal("login");
+}
+
 const closeActiveModal = () => {
   setActiveModal("");
   setIsAddItemModalOpen(false);
@@ -97,7 +107,6 @@ const handleDeleteClick = (itemId) => {
   setSelectedItem({ _id: itemId });
   setActiveModal("delete");
 }
-
   
 const handleAddItem = (item) => {
   const makeRequest = () => api.addItem(item);
@@ -111,7 +120,6 @@ const handleAddItem = (item) => {
   });
 };
 
-
 const handleLikeItem = ({ _id, isLiked }) => {
   const likeAction = isLiked ? api.dislikeItem : api.likeItem;
 
@@ -119,16 +127,14 @@ const handleLikeItem = ({ _id, isLiked }) => {
 
   handleSubmit(makeRequest, {
     onSuccess: (updatedItem) => {
-      setClothingItems((prevItems) =>
-        prevItems.map((item) =>
+      setClothingItems((items) =>
+        items.map((item) =>
           item._id === updatedItem._id ? updatedItem : item
         )
       );
     }
   });
 };
-
-
   
 const handleEditProfileClick = () => {
   setActiveModal("edit-profile");
@@ -158,6 +164,7 @@ const handleLogInUser = ({ email, password }) => {
     onSuccess: (data) => {
       localStorage.setItem('jwt', data.token);
       setCurrentUser(data.user);
+      setIsLoggedIn(true);
       navigate('/');
     }
   });
@@ -200,8 +207,6 @@ const handleRegisterUser = ({ name, avatar, email, password }) => {
   });
 };
 
-
-
 const handleLogoutUser = () => {
   localStorage.removeItem("jwt");
   setIsLoggedIn(false);
@@ -212,12 +217,28 @@ const handleLogoutUser = () => {
 // Use Effects
 
 useEffect(() => {
-  getWeather(coordinates, APIkey)
-  .then(data => {
-    const filteredData = filterWeatherData(data);
-    setWeatherData(filteredData);
-  }).catch(console.error);
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const coordinates = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+
+      getWeather(coordinates, APIkey)
+        .then((data) => {
+          const filteredData = filterWeatherData(data);
+          setWeatherData(filteredData);
+        })
+        .catch((err) => {
+          console.error("Weather fetch failed:", err);
+        });
+    },
+    (err) => {
+      console.error("Geolocation failed:", err);
+    }
+  );
 }, []);
+
 
 useEffect(() => {
   api.getItems()
@@ -316,12 +337,14 @@ useEffect(() => {
             onClose={closeActiveModal}
             onRegister={handleRegisterUser}
             isLoading={isLoading}
+            onClickLogin={handleSwitchToLogin}
           />
           <LoginModal
             isOpen={activeModal === "login" || isLoginModalOpen}
             onClose={closeActiveModal}
             onLogin={handleLogInUser}
             isLoading={isLoading}
+            onClickRegister={handleSwitchToRegister}
           />
             <EditProfileModal
               isOpen={activeModal === "edit-profile" || isEditProfileModalOpen}

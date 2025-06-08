@@ -44,7 +44,6 @@ function RegisterModal({ isOpen, onClose, onRegister, isLoading, onClickLogin })
             onOverlayClose={handleClose}
             onSubmit={handleSubmit}
             secondaryButtonText={"or Log in"}
-            secondaryButtonLink="/signin"
             secondaryButtonAction={onClickLogin}
         >
 

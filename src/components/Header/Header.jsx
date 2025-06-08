@@ -1,16 +1,14 @@
-import './Header.css';
 import logo from '../../assets/Wtwr-Logo.svg';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import './Header.css';
 
 function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick }) {
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const currentUser = useContext(CurrentUserContext);
-
-
   const isLoggedIn = !!currentUser?._id;
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -29,7 +27,7 @@ function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick }) {
         <img src={logo} alt="App Logo" className="header__logo" />
       </Link>
       <p className="header__date-location">
-        {currentDate}, {weatherData.city} {weatherData.temp.F}&deg;F
+        {`${currentDate}, ${weatherData?.city || "Your City"}`}
       </p>
       <button className="header__menu-button" type="button" onClick={toggleMenu}></button>
 
@@ -37,7 +35,7 @@ function Header({ onAddClick, weatherData, onLoginClick, onRegisterClick }) {
         <button className="header__mobile-menu_close" type="button" onClick={toggleMenu}></button>
         <ToggleSwitch />
         {isLoggedIn ? (
-          <div>
+          <div className={"header__menu-content"}>
             <button onClick={onAddClick} type="button" className="header__clothes-button">
               + Add Clothes
             </button>

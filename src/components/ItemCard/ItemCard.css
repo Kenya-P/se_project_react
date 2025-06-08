@@ -45,9 +45,10 @@
     opacity: 0.4;
 }
 
-.card__like-button:active {
+.card__like-button_active {
     transform: scale(0.9);
     background: url('../../assets/liked-button.svg') transparent no-repeat center center;
+    background-size: contain;
 }
 
 .card__info {

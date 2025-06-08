@@ -15,7 +15,7 @@ const isDay = ({ sunrise, sunset }, now) => {
 export const filterWeatherData = (data) => {
     const result = {};
 
-    result.cty = data.name;
+    result.city = data.name;
     result.temp = { F: Math.round(data.main.temp), C: Math.round((data.main.temp - 32) * 5 / 9) };
     result.type = getWeatherType(data.main.temp);
     result.condition = weatherConditionMap[data.weather[0].main.toLowerCase()] || data.weather[0].main;

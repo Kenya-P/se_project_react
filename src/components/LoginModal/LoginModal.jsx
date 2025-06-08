@@ -12,14 +12,7 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onLogin(values)
-            .then(() => {
-                setValues({ email: '', password: '' });
-                onClose();
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        onLogin(values);
     };
 
     useEffect(() => {
@@ -37,7 +30,6 @@ function LoginModal({ isOpen, onClose, onLogin, isLoading, onClickRegister }) {
             onClose={onClose}
             onSubmit={handleSubmit}
             secondaryButtonText={"or Sign up"}
-            secondaryButtonLink="/signup"
             secondaryButtonAction={onClickRegister}
         >
             <label htmlFor="login-email" className="modal__label">
