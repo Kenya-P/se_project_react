@@ -20,6 +20,7 @@ import ProtectedRoute from '../../contexts/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
 import * as auth from '../../utils/auth';
+import handleSubmit from '../../utils/handleSubmit';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -43,31 +44,31 @@ const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
 
 
 const handleToggleSwitchChange = () => {
-    setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
-  }
+  setCurrentTempUnit(currentTempUnit === "F" ? "C" : "F");
+}
 
-  const handleAddClick = () => {
-    setActiveModal("add-garment")
-    setIsAddItemModalOpen(true);
-  }
+const handleAddClick = () => {
+  setActiveModal("add-garment")
+  setIsAddItemModalOpen(true);
+}
 
-  const handleLoginClick = () => {
-    setActiveModal("login");
-  }
+const handleLoginClick = () => {
+  setActiveModal("login");
+}
 
-  const handleRegisterClick = () => {
-    setActiveModal("register");
-  }
+const handleRegisterClick = () => {
+  setActiveModal("register");
+}
 
-  const closeActiveModal = () => {
-    setActiveModal("");
-    setIsAddItemModalOpen(false);
-    setIsLoginModalOpen(false);
-    setIsRegisterModalOpen(false);
-    setIsEditProfileModalOpen(false);
-    setIsItemModalOpen(false);
-    setIsDeleteModalOpen(false);
-  }
+const closeActiveModal = () => {
+  setActiveModal("");
+  setIsAddItemModalOpen(false);
+  setIsLoginModalOpen(false);
+  setIsRegisterModalOpen(false);
+  setIsEditProfileModalOpen(false);
+  setIsItemModalOpen(false);
+  setIsDeleteModalOpen(false);
+}
 
   useEffect(() => {
 
@@ -86,116 +87,95 @@ const handleToggleSwitchChange = () => {
     };
   }, [activeModal]);
 
-  const handleItemClick = (item) => {
-    setActiveModal("preview");
-    setSelectedItem(item);
-    setIsItemModalOpen(true);
-  }
+const handleItemClick = (item) => {
+  setActiveModal("preview");
+  setSelectedItem(item);
+  setIsItemModalOpen(true);
+}
 
-  const handleDeleteClick = (itemId) => {
-    setSelectedItem({ _id: itemId });
-    setActiveModal("delete");
-    }
-
-  const handleAddItem = (itemData) => {
-    const token = localStorage.getItem("jwt");
-    setIsLoading(true);
-
-    return api.addItem(itemData, token)
-      .then((newItem) => {
-        setClothingItems([newItem, ...clothingItems]);
-      })
-      .catch(err => console.error("Add item failed:", err))
-      .finally(() => {
-        closeActiveModal();
-        setIsLoading(false);
-      });
-  };
-
-
-  const handleLikeItem = ({ _id, isLiked }) => {
-    const token = localStorage.getItem("jwt");
-
-    const likeAction = isLiked ? api.dislikeItem : api.likeItem;
-
-    likeAction(_id, token)
-      .then((updatedItem) => {
-        setClothingItems((prevItems) =>
-          prevItems.map((item) =>
-            item._id === updatedItem._id ? updatedItem : item
-          )
-        );
-      })
-      .catch((err) => {
-        console.error("Error updating like status:", err);
-      });
-  };
+const handleDeleteClick = (itemId) => {
+  setSelectedItem({ _id: itemId });
+  setActiveModal("delete");
+}
 
   
-  const handleEditProfileClick = () => {
-    setActiveModal("edit-profile");
-    setIsEditProfileModalOpen(true);
-  }
+const handleAddItem = (item) => {
+  const makeRequest = () => addItem(item);
 
-  const handleDeleteItem = () => {
-    const token = localStorage.getItem("jwt");
-    setIsLoading(true);
-
-
-    return api.removeItem(selectedItem._id, token)
-      .then(() => {
-        setClothingItems((prevItems) =>
-          prevItems.filter((item) => item._id !== selectedItem._id)
-        );
-        closeActiveModal();
-      })
-    .catch((err) => console.error("Delete error:", err))
-    .finally(() => setIsLoading(false));
+  handleSubmit(makeRequest, {
+    onLoading: setIsLoading,
+    onSuccess: (newItem) => {
+      setClothingItems([newItem, ...clothingItems]);
+      closeActiveModal();
+    }
+  });
 };
+
+
+const handleLikeItem = ({ _id, isLiked }) => {
+
+  const likeAction = isLiked ? api.dislikeItem : api.likeItem;
+
+  likeAction(_id)
+    .then((updatedItem) => {
+      setClothingItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === updatedItem._id ? updatedItem : item
+        )
+      );
+    })
+    .catch((err) => {
+      console.error("Error updating like status:", err);
+    });
+};
+
+  
+const handleEditProfileClick = () => {
+  setActiveModal("edit-profile");
+  setIsEditProfileModalOpen(true);
+}
+
+const handleDeleteItem = (itemId) => {
+  const makeRequest = () => api.removeItem(itemId);
+
+  handleSubmit(makeRequest, {
+    onLoading: setIsLoading,
+    onSuccess: () => {
+      setClothingItems((items) => items.filter((item) => item._id !== itemId));
+      closeActiveModal();
+    }
+  });
+};
+
+
 const navigate = useNavigate();
 
 const handleLogInUser = ({ email, password }) => {
-    setIsLoading(true);
-  return auth.logIn({ email, password })
-  .then((res) => {
-    if (res.token) {
-        localStorage.setItem("jwt", res.token);
-        setIsLoggedIn(true);
-        return auth.checkToken(res.token);
-      }
-      closeActiveModal();
+  const makeRequest = () => auth.logIn({ email, password });
 
-    })
-    .then((userData) => {
-      setCurrentUser(userData);
-      navigate("/profile");
-    })
-    .catch((err) => {
-      console.error("Login failed:", err);
-      // optionally set error message for display
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+  handleSubmit(makeRequest, {
+    onLoading: setIsLoading,
+    onSuccess: (data) => {
+      localStorage.setItem('jwt', data.token);
+      setCurrentUser(data.user);
+      navigate('/');
+    }
+  });
+};
+
+
+function handleUpdateUser(inputValues) {
+  const makeRequest = () => api.updateUserProfile(inputValues);
+
+  handleSubmit(makeRequest, {
+    onLoading: setIsLoading,
+    onSuccess: (updatedUser) => {
+      setCurrentUser(updatedUser);
+      closeActiveModal();
+    }
+  });
 }
 
-const handleUpdateUser = (updatedData) => {
-  const token = localStorage.getItem("jwt");
-  setIsLoading(true);
-    api.updateUserProfile(updatedData, token)
-      .then((updatedUser) => {
-        setCurrentUser(updatedUser);
-        closeActiveModal();
-        setErrorMessage(""); // if used
-      })
-      .catch((err) => {
-        console.error("Update failed:", err);
-        setErrorMessage(err.message); // optional
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
 
   const handleRegisterUser = ({ name, avatar, email, password }) => {
     setIsLoading(true);
@@ -223,12 +203,12 @@ const handleUpdateUser = (updatedData) => {
 }
 
 
-  const handleLogoutUser = () => {
-    localStorage.removeItem("jwt");
-    setIsLoggedIn(false);
-    setCurrentUser({});
-    navigate("/");
-  }
+const handleLogoutUser = () => {
+  localStorage.removeItem("jwt");
+  setIsLoggedIn(false);
+  setCurrentUser({});
+  navigate("/");
+}
 
 // Use Effects
 

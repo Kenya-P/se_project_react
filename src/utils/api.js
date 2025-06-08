@@ -35,69 +35,67 @@ function getItems() {
 }
 
 
-function addItem({ name, imageUrl, weather }, token) {
+function addItem(name, imageUrl, weather) {
+  const token = localStorage.getItem("jwt");
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      name: name,
-      imageUrl: imageUrl,
-      weather: weather,
-    }),
+    body: JSON.stringify({ name, imageUrl, weather }),
   }).then(_handleResponse)
-  .catch((error) => Promise.reject(error));
-}
-
-function removeItem(itemId, token) {
-    return fetch(`${baseUrl}/items/${itemId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    .then(_handleResponse)
     .catch((error) => Promise.reject(error));
 }
 
-function likeItem(itemId, token) {
-    return fetch(`${baseUrl}/items/${itemId}/likes`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    .then(_handleResponse)
+function removeItem(itemId) {
+  const token = localStorage.getItem("jwt");
+  return fetch(`${baseUrl}/items/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ itemId }),
+  }).then(_handleResponse)
     .catch((error) => Promise.reject(error));
 }
 
-function dislikeItem(itemId, token) {
-    return fetch(`${baseUrl}/items/${itemId}/likes`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    .then(_handleResponse)
+function likeItem(itemId) {
+  const token = localStorage.getItem("jwt");
+  return fetch(`${baseUrl}/items/${itemId}/likes`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ itemId }),
+  }).then(_handleResponse)
     .catch((error) => Promise.reject(error));
 }
 
-function updateUserProfile({ name, avatar }, token) {
+function dislikeItem(itemId) {
+  const token = localStorage.getItem("jwt");
+  return fetch(`${baseUrl}/items/${itemId}/likes`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ itemId }),
+  }).then(_handleResponse)
+    .catch((error) => Promise.reject(error));
+}
+
+function updateUserProfile(name, avatar) {
+  const token = localStorage.getItem("jwt");
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      name: name,
-      avatar: avatar,
-    }),
+    body: JSON.stringify({ name, avatar }),
   }).then(_handleResponse)
     .catch((error) => Promise.reject(error));
 }
