@@ -16,9 +16,13 @@ function ClothesSection({ onAddNew, onItemClick, clothingItems, onItemLike }) {
         <button className="clothes__section-button" onClick={onAddNew}>+ Add New</button>
       </div>
       <ul className="clothes__section-list">
-        {userItems.map((item) => (
-          <ItemCard key={item._id} item={item} onItemClick={onItemClick} onItemLike={onItemLike}/>
-        ))}
+        {userItems.length === 0 ? (
+          <p className="clothes__empty-message">You haven't added any items yet.</p>
+        ) : (
+          userItems.map((item) => (
+            <ItemCard key={item._id} item={item} onItemClick={onItemClick} onItemLike={onItemLike}/>
+          ))
+        )}
       </ul>
     </div>
   );

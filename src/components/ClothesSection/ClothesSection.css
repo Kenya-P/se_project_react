@@ -26,6 +26,14 @@
     gap: 20px;
 }
 
+.clothes__empty-message {
+  text-align: center;
+  padding: 24px;
+  font-size: 16px;
+  color: #666;
+}
+
+
 @media  screen and (max-width: 627px) {
 
     .clothes__section {

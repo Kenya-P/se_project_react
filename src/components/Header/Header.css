@@ -186,11 +186,16 @@
         box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.2);
     }
 
+    .header__menu-content {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
     .header__clothes-button {
         border: none;
         background-color: transparent;
         margin: 0;
-        padding-top: 24px;
+        padding-bottom: 16px;
     }
 
     .header__user-container {

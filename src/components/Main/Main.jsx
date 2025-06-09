@@ -29,11 +29,10 @@ function Main({ weatherData, handleItemClick, clothingItems, onItemLike }) {
         <p className="cards__text">Today is {weatherData.temp[currentTempUnit]}&deg;{currentTempUnit}/ You may want to wear:</p>
       </section>
       <ul className="cards__list">
-        {clothingItems.filter((item) => {
-          return item.weather === weatherData.type;
-        }).map((item) => {
-          return <ItemCard key={item._id} item={item} onItemClick={handleItemClick} onItemLike={onItemLike}/>;
-        })}
+        {clothingItems.filter(item => item.weather === weatherData.type)
+          .map(item => (
+            <ItemCard key={item._id} item={item} onItemClick={handleItemClick} onItemLike={onItemLike} />
+        ))}
       </ul>
       <button className="cards__randomize-button" type="button" onClick={handleRandomizeClick} >Randomize</button>
     </main>

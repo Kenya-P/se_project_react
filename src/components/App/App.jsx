@@ -114,11 +114,12 @@ const handleAddItem = (item) => {
   handleSubmit(makeRequest, {
     onLoading: setIsLoading,
     onSuccess: (newItem) => {
-      setClothingItems([newItem, ...clothingItems]);
+      setClothingItems((prevItems) => [newItem, ...prevItems]);
       closeActiveModal();
-    }
+    },
   });
 };
+
 
 const handleLikeItem = ({ _id, isLiked }) => {
   const likeAction = isLiked ? api.dislikeItem : api.likeItem;
@@ -166,6 +167,11 @@ const handleLogInUser = ({ email, password }) => {
       setCurrentUser(data.user);
       setIsLoggedIn(true);
       navigate('/');
+      closeActiveModal();
+    },
+    onError: (err) => {
+      console.error("Login failed:", err);
+      setErrorMessage("Login failed. Please check your credentials.");
     }
   });
 };
@@ -241,28 +247,33 @@ useEffect(() => {
 
 
 useEffect(() => {
-  api.getItems()
-    .then((data) => {
-      setClothingItems(data.reverse());
-    })
-    .catch(console.error);
-}, []);
+      api.getItems()
+      .then((items) => setClothingItems(items))
+      .catch(console.error);
+  }, []);
+
 
 useEffect(() => {
   const token = localStorage.getItem("jwt");
-  if (!token) return;
 
-  auth.checkToken(token)
-    .then((userData) => {
-      setIsLoggedIn(true);
-      setCurrentUser(userData);
-    })
-    .catch((err) => {
-      console.error("Token check failed:", err);
-      setIsLoggedIn(false);
-      localStorage.removeItem("jwt");
-    });
+  if (token) {
+    auth.checkToken(token)
+      .then((userData) => {
+        setCurrentUser(userData);
+        setIsLoggedIn(true);
+        return api.getItems();
+      })
+      .then((items) => {
+        setClothingItems(items.reverse());
+      })
+      .catch((err) => {
+        console.error("Login failed:", err);
+        setIsLoggedIn(false);
+      });
+  }
 }, []);
+
+
 
 
 
