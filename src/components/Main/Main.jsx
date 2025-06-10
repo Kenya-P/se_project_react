@@ -4,37 +4,59 @@ import ItemCard from '../ItemCard/ItemCard';
 import CurrentTempUnitContext from '../../contexts/CurrentTempUnit';
 import { useContext } from 'react';
 
-
-
 function Main({ weatherData, handleItemClick, clothingItems, onItemLike }) {
-  // Use the CurrentTempUnitContext to get the current temperature unit
   const { currentTempUnit } = useContext(CurrentTempUnitContext);
 
   const handleRandomizeClick = () => {
-    const filteredItems = clothingItems.filter((item) => {
-      return item.weather === weatherData.type;
-    });
-    
+    if (!weatherData || !clothingItems?.length) return;
+
+    const filteredItems = clothingItems.filter(item => item.weather === weatherData.type);
+    if (filteredItems.length === 0) return;
+
     const randomIndex = Math.floor(Math.random() * filteredItems.length);
     const randomItem = filteredItems[randomIndex];
 
-    handleItemClick(randomItem);
+    if (randomItem) {
+      handleItemClick(randomItem);
+    }
+  };
 
-  }
-
-  return(
+  return (
     <main className="content">
       <WeatherCard weatherData={weatherData} />
+
       <section className="cards">
-        <p className="cards__text">Today is {weatherData.temp[currentTempUnit]}&deg;{currentTempUnit}/ You may want to wear:</p>
+        {weatherData?.temp?.[currentTempUnit] ? (
+          <p className="cards__text">
+            Today is {weatherData.temp[currentTempUnit]}&deg;{currentTempUnit}/ You may want to wear:
+          </p>
+        ) : (
+          <p className="cards__text">Loading weather data...</p>
+        )}
       </section>
+
       <ul className="cards__list">
-        {clothingItems.filter(item => item.weather === weatherData.type)
-          .map(item => (
-            <ItemCard key={item._id} item={item} onItemClick={handleItemClick} onItemLike={onItemLike} />
-        ))}
+        {clothingItems?.length > 0 &&
+          clothingItems
+            .filter(item => item.weather === weatherData?.type)
+            .map(item => (
+              <ItemCard
+                key={item._id}
+                item={item}
+                onItemClick={handleItemClick}
+                onItemLike={onItemLike}
+              />
+            ))}
       </ul>
-      <button className="cards__randomize-button" type="button" onClick={handleRandomizeClick} >Randomize</button>
+
+      <button
+        className="cards__randomize-button"
+        type="button"
+        onClick={handleRandomizeClick}
+        disabled={!clothingItems?.length || !weatherData}
+      >
+        Randomize
+      </button>
     </main>
   );
 }

@@ -29,13 +29,14 @@ function ItemModal({ activeModal, item, handleDeleteClick, isOpen, onClose }) {
                     <h2 className="modal__caption">{item.name}</h2>
                     <p className="modal__weather">Weather: {item.weather}</p>
                 </div>
-                <button
-                    className={itemDeleteButton}
-                    type="button"
-                    onClick={() => handleDeleteClick(item._id)}
-                >
-                    Delete Item
-                </button>
+                {isOwner && (
+                    <button
+                        className={itemDeleteButton}
+                        type="button"
+                        onClick={() => handleDeleteClick(item._id)}
+                    >Delete Item
+                    </button>
+                )}
             </div>
         </div>
     );

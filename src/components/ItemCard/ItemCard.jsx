@@ -1,9 +1,10 @@
 import './ItemCard.css';
-import React from 'react';
+import React, { useContext } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function ItemCard({ item, onItemClick, onItemLike }) {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
+
   const isLiked = currentUser && item.likes.some(id => id === currentUser._id);
 
   const handleCardClick = () => {
@@ -25,7 +26,7 @@ function ItemCard({ item, onItemClick, onItemLike }) {
       <div className="card__info">
         <h2 className="card__name">{item.name}</h2>
         {/* Show like button only if user is logged in */}
-        {currentUser._id && (
+        {currentUser && currentUser._id && (
           <button
             type="button"
             className={`card__like-button ${isLiked ? 'card__like-button_active' : ''}`}
