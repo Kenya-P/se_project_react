@@ -2,14 +2,14 @@ import './ClothesSection.css';
 import ItemCard from '../ItemCard/ItemCard';
 import React, { useContext, useMemo } from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import PropTypes from 'prop-types';
 
 function ClothesSection({ onAddNew, onItemClick, clothingItems = [], onItemLike }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const userItems = useMemo(() => {
-    if (!currentUser?._id) return [];
-    return clothingItems.filter(item => item.owner === currentUser._id);
-  }, [clothingItems, currentUser]);
+  const userItems = clothingItems.filter(
+    (item) => item.owner === currentUser?._id
+  );
 
   return (
     <div className="clothes__section">
@@ -31,6 +31,13 @@ function ClothesSection({ onAddNew, onItemClick, clothingItems = [], onItemLike 
     </div>
   );
 }
+
+ClothesSection.propTypes = {
+  onAddNew: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
+  clothingItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onItemLike: PropTypes.func.isRequired,
+};
 
 export default ClothesSection;
 

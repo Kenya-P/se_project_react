@@ -246,10 +246,14 @@ useEffect(() => {
 }, []);
 
 
-useEffect(() => {
-      api.getItems()
-      .then((items) => setClothingItems(items))
-      .catch(console.error);
+  useEffect(() => {
+    api.getItems()
+      .then((data) => {
+        setClothingItems(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error.message);
+      });
   }, []);
 
 
@@ -272,9 +276,6 @@ useEffect(() => {
       });
   }
 }, []);
-
-
-
 
 
   return (
