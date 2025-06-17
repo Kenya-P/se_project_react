@@ -21,6 +21,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import api from '../../utils/api';
 import * as auth from '../../utils/auth';
 import handleSubmit from '../../utils/handleSubmit';
+import { use } from 'react';
 
 function App() {
   const [weatherData, setWeatherData] = useState({ type: "", temp: { F: 999}, city: "", condition: "", isDay: false });
@@ -164,10 +165,22 @@ const handleLogInUser = ({ email, password }) => {
     onLoading: setIsLoading,
     onSuccess: (data) => {
       localStorage.setItem('jwt', data.token);
-      setCurrentUser(data.user);
-      setIsLoggedIn(true);
-      navigate('/');
-      closeActiveModal();
+      const token = data.token;
+
+      auth.checkToken(token)
+        .then((userData) => {
+          setCurrentUser(userData);
+          setIsLoggedIn(true);
+          return api.getItems(); // Now fetch after user is set
+        })
+        .then((items) => {
+          setClothingItems(items.reverse()); // show their items
+          navigate("/");
+          closeActiveModal();
+        })
+        .catch((err) => {
+          console.error("Login or item fetch failed:", err);
+        });
     },
     onError: (err) => {
       console.error("Login failed:", err);
@@ -175,6 +188,7 @@ const handleLogInUser = ({ email, password }) => {
     }
   });
 };
+
 
 
 function handleUpdateUser(inputValues) {
@@ -246,36 +260,34 @@ useEffect(() => {
 }, []);
 
 
-  useEffect(() => {
-    api.getItems()
-      .then((data) => {
-        setClothingItems(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching items:", error.message);
-      });
-  }, []);
-
-
 useEffect(() => {
-  const token = localStorage.getItem("jwt");
+  const token = localStorage.getItem('jwt');
 
-  if (token) {
-    auth.checkToken(token)
-      .then((userData) => {
-        setCurrentUser(userData);
-        setIsLoggedIn(true);
-        return api.getItems();
-      })
-      .then((items) => {
-        setClothingItems(items.reverse());
-      })
-      .catch((err) => {
-        console.error("Login failed:", err);
-        setIsLoggedIn(false);
-      });
+  if (!token) {
+    // Guest user
+    api.getItems()
+      .then(setClothingItems)
+      .catch(err => console.error('Failed to fetch default items', err));
+    return;
   }
+
+  auth.checkToken(token)
+    .then(user => {
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+      return api.getItems();
+    })
+    .then(setClothingItems)
+    .catch(err => {
+      console.warn('Token invalid. Logging out.');
+      localStorage.removeItem('jwt');
+      setIsLoggedIn(false);
+      setCurrentUser(null);
+      return api.getItems().then(setClothingItems); // fallback for guest
+    });
 }, []);
+
+
 
 
   return (

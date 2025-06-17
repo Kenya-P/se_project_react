@@ -22,18 +22,17 @@ function request(url, options) {
 
 function getItems() {
   const token = localStorage.getItem('jwt');
-  if (!token) {
-    console.warn("JWT token missing; skipping item fetch.");
-    return Promise.resolve([]);
-  }
+
+  const headers = token
+    ? { Authorization: `Bearer ${token}` }
+    : {}; // Don't send Authorization if not logged in
 
   return request(`${baseUrl}/items`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers,
   });
 }
+
 
 function addItem({ name, imageUrl, weather }) {
   const token = localStorage.getItem("jwt");
