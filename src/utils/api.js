@@ -1,4 +1,6 @@
-export const baseUrl = "http://localhost:3001";
+export const baseUrl = process.env.NODE_ENV === "production" 
+  ? "https://api.wtwr-kenya.crabdance.com"
+  : "http://localhost:3001";
 
 export function _handleResponse(res) {
   if (res.ok) {
