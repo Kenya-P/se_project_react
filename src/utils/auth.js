@@ -24,7 +24,7 @@ export const logIn = function ({ email, password }) {
 };
 
 export const checkToken = (token) => {
-  return fetch(`${baseUrl}/me`, {
+  return fetch(`${baseUrl}/users/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

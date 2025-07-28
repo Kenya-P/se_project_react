@@ -16,6 +16,9 @@ https://github.com/Kenya-P/se_project_react.git
 - backend
 https://github.com/Kenya-P/se_project_express
 
-### Github pages link
+## 🌐 Deployment
+Backend URL: [https://api.wtwr-kenya.crabdance.com]
 
-https://kenya-p.github.io/se_project_react/
+Frontend URL: [https://wtwr-kenya.crabdance.com/]
+
+The backend supports both HTTP and HTTPS connections.
