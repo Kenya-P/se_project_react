@@ -175,7 +175,7 @@ const handleLogInUser = ({ email, password }) => {
         })
         .then((items) => {
           setClothingItems(items.reverse()); // show their items
-          navigate("/");
+          navigate("/profile");
           closeActiveModal();
         })
         .catch((err) => {
