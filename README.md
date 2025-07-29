@@ -66,6 +66,7 @@ This frontend application is part of a weather-based clothing recommendation pla
 
 - Prettier for formatting (.prettierignore included)
 
+---
 
 ### 🔗 Github link
 
